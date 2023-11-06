@@ -39,8 +39,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/v1/user/authentication").permitAll()
-                        .requestMatchers("/api/v1/building/**").hasAnyRole(SystemConstants.MANAGER, SystemConstants.STAFF)
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/authentication").permitAll()
+                        .requestMatchers("/api/v1/buildings/**").hasAnyRole(SystemConstants.MANAGER, SystemConstants.STAFF)
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
