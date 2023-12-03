@@ -11,7 +11,7 @@ import java.util.List;
 public class BuildingSearchRequest extends PaginationRequest {
 
 
-    private String name;
+    private String buildingName;
     private Double floorArea;
     private String districtCode;
     private String ward;

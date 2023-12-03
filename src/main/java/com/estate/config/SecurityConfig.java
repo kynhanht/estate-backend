@@ -1,6 +1,5 @@
 package com.estate.config;
 
-import com.estate.constant.SystemConstants;
 import com.estate.security.JwtAccessDeniedHandler;
 import com.estate.security.JwtAuthenticationEntryPoint;
 import com.estate.security.JwtAuthenticationFilter;
@@ -40,8 +39,9 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/authentication").permitAll()
-                        .requestMatchers("/api/v1/buildings/**").hasAnyRole(SystemConstants.MANAGER, SystemConstants.STAFF)
-                        .anyRequest().authenticated()
+//                        .requestMatchers("/api/v1/buildings/**").hasAnyRole(SystemConstants.MANAGER, SystemConstants.STAFF)
+//                        .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(unauthorizedHandler))

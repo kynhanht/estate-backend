@@ -9,6 +9,7 @@ import com.estate.dto.request.UserSearchRequest;
 import com.estate.dto.respone.PaginationResponse;
 import com.estate.dto.respone.StaffResponse;
 import com.estate.dto.respone.UserSearchResponse;
+import com.estate.entity.BaseEntity;
 import com.estate.entity.RoleEntity;
 import com.estate.entity.UserEntity;
 import com.estate.entity.UserEntity_;
@@ -57,7 +58,7 @@ public class UserService implements IUserService {
                 .and(userSpecification.byCommon(new SearchCriteria(UserEntity_.FULL_NAME, request.getName(), SearchOperationEnum.CONTAINING))
                         .or(userSpecification.byCommon(new SearchCriteria(UserEntity_.USER_NAME, request.getName(), SearchOperationEnum.CONTAINING))))
                 .and(userSpecification.orderBy(request.getSortColumnName(), request.getSortDirection()));
-        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getTotalPageItems());
+        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getPageSize());
         Page<UserEntity> page = userRepository.findAll(specification, pageable);
         List<UserSearchResponse> responses = page
                 .getContent()
@@ -67,7 +68,7 @@ public class UserService implements IUserService {
         PaginationResponse<UserSearchResponse> paginationResponse = new PaginationResponse<>();
         paginationResponse.setPage(request.getPage());
         paginationResponse.setTotalPages(page.getTotalPages());
-        paginationResponse.setTotalPageItems(request.getTotalPageItems());
+        paginationResponse.setPageSize(request.getPageSize());
         paginationResponse.setTotalItems((int) page.getTotalElements());
         paginationResponse.setListResult(responses);
         return paginationResponse;
@@ -185,14 +186,14 @@ public class UserService implements IUserService {
                     StaffResponse staffRespone = new StaffResponse();
                     staffRespone.setStaffId(staff.getId());
                     staffRespone.setFullName(staff.getFullName());
-                    staffRespone.setChecked("");
+                    staffRespone.setChecked(false);
                     // Map into List of buildingId
                     List<Long> buildingIds = staff.getBuildings()
                             .stream()
-                            .map(building -> building.getId())
+                            .map(BaseEntity::getId)
                             .toList();
                     // Check List of buildingId contain request building
-                    if (buildingIds.contains(buildingId)) staffRespone.setChecked("checked");
+                    if (buildingIds.contains(buildingId)) staffRespone.setChecked(true);
                     return staffRespone;
                 }
         ).collect(Collectors.toList());
@@ -207,14 +208,14 @@ public class UserService implements IUserService {
                     StaffResponse staffRespone = new StaffResponse();
                     staffRespone.setStaffId(staff.getId());
                     staffRespone.setFullName(staff.getFullName());
-                    staffRespone.setChecked("");
+                    staffRespone.setChecked(false);
                     // Map into List of buildingId
                     List<Long> customerIds = staff.getCustomers()
                             .stream()
-                            .map(customer -> customer.getId())
+                            .map(BaseEntity::getId)
                             .toList();
                     // Check List of customerId contain request customerId
-                    if (customerIds.contains(customerId)) staffRespone.setChecked("checked");
+                    if (customerIds.contains(customerId)) staffRespone.setChecked(true);
                     return staffRespone;
                 }
         ).collect(Collectors.toList());

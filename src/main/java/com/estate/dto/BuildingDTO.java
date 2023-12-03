@@ -16,8 +16,8 @@ public class BuildingDTO implements Serializable {
 
     private Long id;
 
-    @NotEmpty(message = "Name is required")
-    private String name;
+    @NotEmpty(message = "BuildingName is required")
+    private String buildingName;
 
     private String districtCode;
 

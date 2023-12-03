@@ -11,7 +11,7 @@ public class PaginationRequest implements Serializable {
 
     private Integer page = 1;
 
-    private Integer totalPageItems = 4;
+    private Integer pageSize = 4;
 
     private String sortColumnName;
 

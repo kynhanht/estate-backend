@@ -14,7 +14,7 @@ public class PaginationResponse<T> implements Serializable {
     private List<T> listResult = new ArrayList<>();
     private Integer page = 1;
     private Integer totalPages;
-    private Integer totalPageItems = 4;
+    private Integer pageSize = 4;
     private Integer totalItems;
 
 

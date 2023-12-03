@@ -1,6 +1,5 @@
 package com.estate.controller;
 
-import com.estate.security.JwtTokenProvider;
 import com.estate.dto.AuthToken;
 import com.estate.dto.UserDTO;
 import com.estate.dto.request.PasswordRequest;
@@ -8,6 +7,7 @@ import com.estate.dto.request.UserSearchRequest;
 import com.estate.dto.respone.PaginationResponse;
 import com.estate.dto.respone.StaffResponse;
 import com.estate.dto.respone.UserSearchResponse;
+import com.estate.security.JwtTokenProvider;
 import com.estate.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -102,5 +102,11 @@ public class UserController {
             userService.deleteUsers(ids);
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{buildingId}/staffs")
+    public ResponseEntity<List<StaffResponse>> loadStaff(@PathVariable Long buildingId) {
+
+        return ResponseEntity.ok(userService.findStaffsByBuildingId(buildingId));
     }
 }

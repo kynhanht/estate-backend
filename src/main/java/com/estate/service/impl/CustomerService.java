@@ -98,7 +98,7 @@ public class CustomerService implements ICustomerService {
                 .and(customerSpecification.byStaffId(request.getStaffId()))
                 .and(customerSpecification.orderBy(request.getSortColumnName(), request.getSortDirection()));
 
-        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getTotalPageItems());
+        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getPageSize());
         Page<CustomerEntity> page = customerRepository.findAll(specification, pageable);
 
         List<CustomerSearchResponse> responses = page
@@ -110,7 +110,7 @@ public class CustomerService implements ICustomerService {
         PaginationResponse<CustomerSearchResponse> paginationResponse = new PaginationResponse<>();
         paginationResponse.setPage(request.getPage());
         paginationResponse.setTotalPages(page.getTotalPages());
-        paginationResponse.setTotalPageItems(request.getTotalPageItems());
+        paginationResponse.setPageSize(request.getPageSize());
         paginationResponse.setTotalItems((int) page.getTotalElements());
         paginationResponse.setListResult(responses);
         return paginationResponse;

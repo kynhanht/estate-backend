@@ -13,6 +13,6 @@ public class StaffResponse implements Serializable {
 
     private Long staffId;
 
-    private String checked;
+    private boolean isChecked;
 
 }

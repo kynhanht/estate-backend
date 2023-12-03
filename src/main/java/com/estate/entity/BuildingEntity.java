@@ -15,8 +15,8 @@ import java.util.List;
 public class BuildingEntity extends BaseEntity {
 
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "building_name")
+    private String buildingName;
 
     @Column(name = "number_of_basement")
     private Integer numberOfBasement;

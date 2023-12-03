@@ -33,8 +33,8 @@ public class BuildingController {
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.findBuildingById(id));
     }
 
-    @GetMapping
-    public ResponseEntity<PaginationResponse<BuildingSearchResponse>> searchBuildings(BuildingSearchRequest request) {
+    @PostMapping("/search")
+    public ResponseEntity<PaginationResponse<BuildingSearchResponse>> searchBuildings(@RequestBody  BuildingSearchRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.searchBuildings(request));
     }
 
@@ -46,7 +46,6 @@ public class BuildingController {
 
     @GetMapping("/types")
     public ResponseEntity<Map<String, String>> getBuildingTypes() {
-
         return ResponseEntity.status(HttpStatus.OK).body(SystemUtils.getBuildingTypes());
     }
 
@@ -59,6 +58,7 @@ public class BuildingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(buildingService.createBuilding(buildingDTO));
 
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBuilding(@PathVariable Long id, @Valid @RequestBody BuildingDTO buildingDTO, BindingResult bindingResult) {
@@ -76,14 +76,16 @@ public class BuildingController {
         if (ids != null && !ids.isEmpty()) {
             buildingService.deleteBuildings(ids);
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
+
 
     @PostMapping("/assignment")
     public ResponseEntity<Void> assignBuilding(@RequestBody AssignmentBuildingRequest request) {
         buildingService.assignBuilding(request);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
+
 
 
 }

@@ -1,6 +1,8 @@
 package com.estate.exception.handler;
 
 
+import com.estate.exception.FileNotFoundException;
+import com.estate.exception.FileStorageException;
 import com.estate.exception.InternalException;
 import com.estate.exception.NotFoundException;
 import org.slf4j.Logger;
@@ -91,6 +93,22 @@ public class CustomExceptionHandler {
         logger.error("Runtime error: {}", ex.getMessage());
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(errorMessage);
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleFileNotFoundException(FileNotFoundException ex) {
+        Logger logger = LoggerFactory.getLogger(FileNotFoundException.class);
+        logger.error("Runtime error: {}", ex.getMessage());
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(FileStorageException.class)
+    public ResponseEntity<ErrorMessage> handleFileStorageException(FileStorageException ex) {
+        Logger logger = LoggerFactory.getLogger(FileStorageException.class);
+        logger.error("Runtime error: {}", ex.getMessage());
+        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
     @ExceptionHandler({Exception.class, InternalException.class})

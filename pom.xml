@@ -22,12 +22,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- Support read file application.properties -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
 
         <!-- Spring Validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+
 
         <!-- Data JPA -->
         <dependency>
@@ -102,6 +108,7 @@
             <artifactId>modelmapper</artifactId>
             <version>0.7.4</version>
         </dependency>
+
 
         <!--  -->
         <dependency>

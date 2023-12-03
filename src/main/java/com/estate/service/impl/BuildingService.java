@@ -45,7 +45,7 @@ public class BuildingService implements IBuildingService {
         BuildingSpecification buildingSpecification = new BuildingSpecification();
 
         Specification<BuildingEntity> specification = Specification
-                .where(buildingSpecification.byCommon(new SearchCriteria(BuildingEntity_.NAME, request.getName(), SearchOperationEnum.CONTAINING)))
+                .where(buildingSpecification.byCommon(new SearchCriteria(BuildingEntity_.BUILDING_NAME, request.getBuildingName(), SearchOperationEnum.CONTAINING)))
                 .and(buildingSpecification.byCommon(new SearchCriteria(BuildingEntity_.FLOOR_AREA, request.getFloorArea(), SearchOperationEnum.EQUAL)))
                 .and(buildingSpecification.byCommon(new SearchCriteria(BuildingEntity_.DISTRICT_CODE, request.getDistrictCode(), SearchOperationEnum.CONTAINING)))
                 .and(buildingSpecification.byCommon(new SearchCriteria(BuildingEntity_.WARD, request.getWard(), SearchOperationEnum.CONTAINING)))
@@ -64,7 +64,7 @@ public class BuildingService implements IBuildingService {
                 .and(buildingSpecification.orderBy(request.getSortColumnName(), request.getSortDirection()));
 
 
-        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getTotalPageItems());
+        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getPageSize());
         Page<BuildingEntity> page = buildingRepository.findAll(specification, pageable);
         List<BuildingSearchResponse> responses = page
                 .getContent()
@@ -74,7 +74,7 @@ public class BuildingService implements IBuildingService {
         PaginationResponse<BuildingSearchResponse> paginationResponse = new PaginationResponse<>();
         paginationResponse.setPage(request.getPage());
         paginationResponse.setTotalPages(page.getTotalPages());
-        paginationResponse.setTotalPageItems(request.getTotalPageItems());
+        paginationResponse.setPageSize(request.getPageSize());
         paginationResponse.setTotalItems((int) page.getTotalElements());
         paginationResponse.setListResult(responses);
         return paginationResponse;

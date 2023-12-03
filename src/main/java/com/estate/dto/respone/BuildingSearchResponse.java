@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class BuildingSearchResponse implements Serializable {
 
     private Long id;
-    private String name;
+    private String buildingName;
     private String address;
     private String managerName;
     private String managerPhone;
