@@ -4,6 +4,7 @@ package com.estate.service.impl;
 import com.estate.config.FileStorageProperties;
 import com.estate.exception.FileNotFoundException;
 import com.estate.exception.FileStorageException;
+import com.estate.service.IFileStorageService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
-public class FileStorageService {
+public class FileStorageService implements IFileStorageService {
 
     private final Path fileImageStorageLocation;
 
@@ -32,15 +33,15 @@ public class FileStorageService {
         }
     }
 
-    String storeImageFile(MultipartFile file) {
+    public String storeImageFile(MultipartFile file) {
         return storeFile(fileImageStorageLocation, file);
     }
 
-    private String storeFile(Path location, MultipartFile file) {
+    public String storeFile(Path location, MultipartFile file) {
         UUID uuid = UUID.randomUUID();
         String ext = StringUtils.getFilenameExtension(file.getOriginalFilename());
         String filename = uuid + "." + ext;
-
+        System.out.println(filename);
         try {
             if (filename.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence: " + filename);
@@ -58,7 +59,7 @@ public class FileStorageService {
         return loadFileAsResource(fileImageStorageLocation, filename);
     }
 
-    private Resource loadFileAsResource(Path location, String filename) {
+    public Resource loadFileAsResource(Path location, String filename) {
         try {
             Path filePath = location.resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
@@ -76,7 +77,7 @@ public class FileStorageService {
         deleteFile(fileImageStorageLocation, filename);
     }
 
-    private void deleteFile(Path location, String filename) {
+    public void deleteFile(Path location, String filename) {
         try {
             Path filePath = location.resolve(filename).normalize();
             if (!Files.exists(filePath)) {

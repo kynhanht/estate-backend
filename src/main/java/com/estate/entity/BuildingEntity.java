@@ -57,8 +57,8 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "car_fee")
     private String carFee;
 
-    @Column(name = "motobike_fee")
-    private String motobikeFee;
+    @Column(name = "motorbike_fee")
+    private String motorbikeFee;
 
     @Column(name = "overtime_fee")
     private String overtimeFee;
@@ -93,8 +93,8 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "map")
     private String map;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "image_name")
+    private String imageName;
 
     @Column(name = "manager_phone")
     private String managerPhone;

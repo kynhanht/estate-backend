@@ -47,7 +47,7 @@ public class BuildingDTO implements Serializable {
 
     private String carFee;
 
-    private String motobikeFee;
+    private String motorbikeFee;
 
     private String overtimeFee;
 

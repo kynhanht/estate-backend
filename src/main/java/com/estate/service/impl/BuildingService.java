@@ -14,9 +14,9 @@ import com.estate.exception.NotFoundException;
 import com.estate.repository.BuildingRepository;
 import com.estate.repository.UserRepository;
 import com.estate.service.IBuildingService;
+import com.estate.service.IFileStorageService;
 import com.estate.specifications.BuildingSpecification;
 import com.estate.specifications.SearchCriteria;
-import com.estate.utils.FileUploadUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +37,8 @@ public class BuildingService implements IBuildingService {
     private final UserRepository userRepository;
 
     private final BuildingConverter buildingConverter;
+
+    private final IFileStorageService fileStorageService;
 
     @Override
     public PaginationResponse<BuildingSearchResponse> searchBuildings(BuildingSearchRequest request) {
@@ -91,11 +93,11 @@ public class BuildingService implements IBuildingService {
     @Transactional
     public BuildingDTO createBuilding(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-        String imageUrl = FileUploadUtils.getFileName(buildingDTO.getImage());
-        buildingEntity.setImageUrl(imageUrl);
-        BuildingDTO newBuilding = buildingConverter.convertToDTO(buildingRepository.save(buildingEntity));
-        FileUploadUtils.uploadFile(buildingDTO.getImage());
-        return newBuilding;
+        if(buildingDTO.getImage() != null){
+            String fileName = fileStorageService.storeImageFile(buildingDTO.getImage());
+            buildingEntity.setImageName(fileName);
+        }
+        return buildingConverter.convertToDTO(buildingRepository.save(buildingEntity));
     }
 
     @Override
@@ -106,14 +108,11 @@ public class BuildingService implements IBuildingService {
         newBuildingEntity.setUsers(oldBuildingEntity.getUsers());
         newBuildingEntity.setCreatedBy(oldBuildingEntity.getCreatedBy());
         newBuildingEntity.setCreatedDate(oldBuildingEntity.getCreatedDate());
-        String fileName = FileUploadUtils.getFileName(buildingDTO.getImage());
-        if (fileName == null) {
-            newBuildingEntity.setImageUrl(oldBuildingEntity.getImageUrl());
-        } else {
-            newBuildingEntity.setImageUrl(fileName);
+        if(buildingDTO.getImage() != null){
+            String fileName = fileStorageService.storeImageFile(buildingDTO.getImage());
+            newBuildingEntity.setImageName(fileName);
         }
         BuildingEntity _buildingEntity = buildingRepository.save(newBuildingEntity);
-        FileUploadUtils.uploadFile(buildingDTO.getImage());
         return buildingConverter.convertToDTO(_buildingEntity);
     }
 

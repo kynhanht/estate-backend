@@ -4,7 +4,6 @@ import com.estate.dto.BuildingDTO;
 import com.estate.dto.respone.BuildingSearchResponse;
 import com.estate.entity.BuildingEntity;
 import com.estate.entity.RentAreaEntity;
-import com.estate.utils.FileUploadUtils;
 import com.estate.utils.SystemUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
@@ -20,23 +19,23 @@ public class BuildingConverter {
 
     private final ModelMapper modelMapper;
 
-    public BuildingDTO convertToDTO(BuildingEntity buildingEntity) {
+    public BuildingDTO convertToDTO(BuildingEntity entity) {
 
-        BuildingDTO entityDTO = modelMapper.map(buildingEntity, BuildingDTO.class);
-        entityDTO.setBuildingTypes(SystemUtils.convertBuildingTypeList(buildingEntity.getBuildingTypes()));
-        entityDTO.setRentArea(SystemUtils.convertToRentArea(buildingEntity.getRentAreas()));
-        entityDTO.setImageUrl(FileUploadUtils.loadPathFile(buildingEntity.getImageUrl()));
-        return entityDTO;
+        BuildingDTO dto = modelMapper.map(entity, BuildingDTO.class);
+        dto.setBuildingTypes(SystemUtils.convertBuildingTypeList(entity.getBuildingTypes()));
+        dto.setRentArea(SystemUtils.convertToRentArea(entity.getRentAreas()));
+        dto.setImageUrl(entity.getImageName());
+        return dto;
     }
 
-    public BuildingEntity convertToEntity(BuildingDTO buildingDTO) {
+    public BuildingEntity convertToEntity(BuildingDTO dto) {
 
-        BuildingEntity buildingEntity = modelMapper.map(buildingDTO, BuildingEntity.class);
-        buildingEntity.setBuildingTypes(SystemUtils.convertBuildingTypes(buildingDTO.getBuildingTypes()));
+        BuildingEntity buildingEntity = modelMapper.map(dto, BuildingEntity.class);
+        buildingEntity.setBuildingTypes(SystemUtils.convertBuildingTypes(dto.getBuildingTypes()));
         // Convert String rentArea to RentAreaEntity
-        if (StringUtils.isNotBlank(buildingDTO.getRentArea())) {
+        if (StringUtils.isNotBlank(dto.getRentArea())) {
             List<RentAreaEntity> rentAreas = new ArrayList<>();
-            String[] rentAreaStringArray = buildingDTO.getRentArea().split(",");
+            String[] rentAreaStringArray = dto.getRentArea().split(",");
             for (String rentArea : rentAreaStringArray) {
                 RentAreaEntity rentAreaEntity = new RentAreaEntity();
                 rentAreaEntity.setValue(Double.valueOf(rentArea));
