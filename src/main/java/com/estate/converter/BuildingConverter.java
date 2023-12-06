@@ -24,7 +24,6 @@ public class BuildingConverter {
         BuildingDTO dto = modelMapper.map(entity, BuildingDTO.class);
         dto.setBuildingTypes(SystemUtils.convertBuildingTypeList(entity.getBuildingTypes()));
         dto.setRentArea(SystemUtils.convertToRentArea(entity.getRentAreas()));
-        dto.setImageUrl(entity.getImageName());
         return dto;
     }
 

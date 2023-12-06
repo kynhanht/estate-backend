@@ -6,7 +6,6 @@ import com.estate.converter.UserConverter;
 import com.estate.dto.UserDTO;
 import com.estate.dto.request.PasswordRequest;
 import com.estate.dto.request.UserSearchRequest;
-import com.estate.dto.respone.PaginationResponse;
 import com.estate.dto.respone.StaffResponse;
 import com.estate.dto.respone.UserSearchResponse;
 import com.estate.entity.BaseEntity;
@@ -23,7 +22,7 @@ import com.estate.specifications.SearchCriteria;
 import com.estate.specifications.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,28 +49,22 @@ public class UserService implements IUserService {
 
 
     @Override
-    public PaginationResponse<UserSearchResponse> searchUsers(UserSearchRequest request) {
+    public PageImpl<UserSearchResponse> searchUsers(UserSearchRequest request, Pageable pageable) {
 
         UserSpecification userSpecification = new UserSpecification();
         Specification<UserEntity> specification = Specification
                 .where(userSpecification.byCommon(new SearchCriteria(UserEntity_.STATUS, SystemConstants.ACTIVE_STATUS, SearchOperationEnum.EQUAL)))
-                .and(userSpecification.byCommon(new SearchCriteria(UserEntity_.FULL_NAME, request.getName(), SearchOperationEnum.CONTAINING))
-                        .or(userSpecification.byCommon(new SearchCriteria(UserEntity_.USER_NAME, request.getName(), SearchOperationEnum.CONTAINING))))
-                .and(userSpecification.orderBy(request.getSortColumnName(), request.getSortDirection()));
-        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getPageSize());
+                .and(userSpecification.byCommon(new SearchCriteria(UserEntity_.FULL_NAME, request.getUserName(), SearchOperationEnum.CONTAINING))
+                        .or(userSpecification.byCommon(new SearchCriteria(UserEntity_.USER_NAME, request.getUserName(), SearchOperationEnum.CONTAINING))));
+
         Page<UserEntity> page = userRepository.findAll(specification, pageable);
         List<UserSearchResponse> responses = page
                 .getContent()
                 .stream()
                 .map(userConverter::convertToUserSearchResponse)
                 .collect(Collectors.toList());
-        PaginationResponse<UserSearchResponse> paginationResponse = new PaginationResponse<>();
-        paginationResponse.setPage(request.getPage());
-        paginationResponse.setTotalPages(page.getTotalPages());
-        paginationResponse.setPageSize(request.getPageSize());
-        paginationResponse.setTotalItems((int) page.getTotalElements());
-        paginationResponse.setListResult(responses);
-        return paginationResponse;
+
+        return new PageImpl<>(responses, page.getPageable(), page.getTotalElements());
     }
 
     @Override

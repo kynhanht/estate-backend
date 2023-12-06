@@ -3,12 +3,13 @@ package com.estate.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-public class BuildingSearchRequest extends PaginationRequest {
+public class BuildingSearchRequest implements Serializable {
 
 
     private String buildingName;

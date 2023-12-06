@@ -6,7 +6,6 @@ import com.estate.dto.BuildingDTO;
 import com.estate.dto.request.AssignmentBuildingRequest;
 import com.estate.dto.request.BuildingSearchRequest;
 import com.estate.dto.respone.BuildingSearchResponse;
-import com.estate.dto.respone.PaginationResponse;
 import com.estate.entity.BuildingEntity;
 import com.estate.entity.BuildingEntity_;
 import com.estate.enums.SearchOperationEnum;
@@ -19,7 +18,7 @@ import com.estate.specifications.BuildingSpecification;
 import com.estate.specifications.SearchCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,7 @@ public class BuildingService implements IBuildingService {
     private final IFileStorageService fileStorageService;
 
     @Override
-    public PaginationResponse<BuildingSearchResponse> searchBuildings(BuildingSearchRequest request) {
+    public PageImpl<BuildingSearchResponse> searchBuildings(BuildingSearchRequest request, Pageable pageable) {
 
 
         BuildingSpecification buildingSpecification = new BuildingSpecification();
@@ -62,24 +61,16 @@ public class BuildingService implements IBuildingService {
                 .and(buildingSpecification.byBuildingTypes(request.getBuildingTypes()))
                 .and(buildingSpecification.byStaffId(request.getStaffId()))
                 .and(buildingSpecification.byRentArea(request.getRentAreaFrom(), request.getRentAreaTo()))
-                .and(buildingSpecification.groupBy(BuildingEntity_.ID))
-                .and(buildingSpecification.orderBy(request.getSortColumnName(), request.getSortDirection()));
+                .and(buildingSpecification.groupBy(BuildingEntity_.ID));
 
-
-        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getPageSize());
         Page<BuildingEntity> page = buildingRepository.findAll(specification, pageable);
         List<BuildingSearchResponse> responses = page
                 .getContent()
                 .stream()
                 .map(buildingConverter::convertToBuildingSearchResponse)
                 .collect(Collectors.toList());
-        PaginationResponse<BuildingSearchResponse> paginationResponse = new PaginationResponse<>();
-        paginationResponse.setPage(request.getPage());
-        paginationResponse.setTotalPages(page.getTotalPages());
-        paginationResponse.setPageSize(request.getPageSize());
-        paginationResponse.setTotalItems((int) page.getTotalElements());
-        paginationResponse.setListResult(responses);
-        return paginationResponse;
+
+        return new PageImpl<>(responses, page.getPageable(), page.getTotalElements());
     }
 
     @Override
@@ -93,8 +84,8 @@ public class BuildingService implements IBuildingService {
     @Transactional
     public BuildingDTO createBuilding(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-        if(buildingDTO.getImage() != null){
-            String fileName = fileStorageService.storeImageFile(buildingDTO.getImage());
+        if(buildingDTO.getImageFile() != null){
+            String fileName = fileStorageService.storeImageFile(buildingDTO.getImageFile());
             buildingEntity.setImageName(fileName);
         }
         return buildingConverter.convertToDTO(buildingRepository.save(buildingEntity));
@@ -108,8 +99,8 @@ public class BuildingService implements IBuildingService {
         newBuildingEntity.setUsers(oldBuildingEntity.getUsers());
         newBuildingEntity.setCreatedBy(oldBuildingEntity.getCreatedBy());
         newBuildingEntity.setCreatedDate(oldBuildingEntity.getCreatedDate());
-        if(buildingDTO.getImage() != null){
-            String fileName = fileStorageService.storeImageFile(buildingDTO.getImage());
+        if(buildingDTO.getImageFile() != null){
+            String fileName = fileStorageService.storeImageFile(buildingDTO.getImageFile());
             newBuildingEntity.setImageName(fileName);
         }
         BuildingEntity _buildingEntity = buildingRepository.save(newBuildingEntity);

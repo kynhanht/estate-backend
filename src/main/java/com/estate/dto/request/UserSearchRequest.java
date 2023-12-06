@@ -3,10 +3,12 @@ package com.estate.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class UserSearchRequest extends PaginationRequest {
+public class UserSearchRequest implements Serializable {
 
-    private String name;
+    private String userName;
 
 }

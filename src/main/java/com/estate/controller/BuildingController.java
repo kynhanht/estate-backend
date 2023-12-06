@@ -4,7 +4,6 @@ import com.estate.dto.BuildingDTO;
 import com.estate.dto.request.AssignmentBuildingRequest;
 import com.estate.dto.request.BuildingSearchRequest;
 import com.estate.dto.respone.BuildingSearchResponse;
-import com.estate.dto.respone.PaginationResponse;
 import com.estate.exception.FileStorageException;
 import com.estate.service.IBuildingService;
 import com.estate.service.IFileStorageService;
@@ -14,6 +13,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,8 +45,9 @@ public class BuildingController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<PaginationResponse<BuildingSearchResponse>> searchBuildings(@RequestBody BuildingSearchRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(buildingService.searchBuildings(request));
+    public ResponseEntity<PageImpl<BuildingSearchResponse>> searchBuildings(@RequestBody BuildingSearchRequest request,
+                                                                            @PageableDefault(size = 4 ,sort = "buildingName", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(buildingService.searchBuildings(request, pageable));
     }
 
     @GetMapping("/districts")

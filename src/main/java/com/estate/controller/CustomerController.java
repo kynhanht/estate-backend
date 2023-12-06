@@ -4,11 +4,14 @@ import com.estate.dto.CustomerDTO;
 import com.estate.dto.request.AssignmentCustomerRequest;
 import com.estate.dto.request.CustomerSearchRequest;
 import com.estate.dto.respone.CustomerSearchResponse;
-import com.estate.dto.respone.PaginationResponse;
 import com.estate.dto.respone.StaffResponse;
 import com.estate.service.ICustomerService;
 import com.estate.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -24,10 +27,10 @@ public class CustomerController {
 
     private final IUserService userService;
 
-    @GetMapping
-    public ResponseEntity<PaginationResponse<CustomerSearchResponse>> searchCustomers(CustomerSearchRequest request) {
+    @PostMapping("/search")
+    public ResponseEntity<PageImpl<CustomerSearchResponse>> searchCustomers(@RequestBody CustomerSearchRequest request, @PageableDefault(size = 4 ,sort = "fullName", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.searchCustomers(request));
+        return ResponseEntity.ok(customerService.searchCustomers(request, pageable));
     }
 
     @GetMapping("/{id}")

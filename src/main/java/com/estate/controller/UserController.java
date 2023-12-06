@@ -4,12 +4,15 @@ import com.estate.dto.AuthToken;
 import com.estate.dto.UserDTO;
 import com.estate.dto.request.PasswordRequest;
 import com.estate.dto.request.UserSearchRequest;
-import com.estate.dto.respone.PaginationResponse;
 import com.estate.dto.respone.StaffResponse;
 import com.estate.dto.respone.UserSearchResponse;
 import com.estate.security.JwtTokenProvider;
 import com.estate.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,9 +50,10 @@ public class UserController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<PaginationResponse<UserSearchResponse>> searchStaffs(@RequestBody UserSearchRequest request) {
-        return ResponseEntity.ok(userService.searchUsers(request));
+    @PostMapping("/search")
+    public ResponseEntity<PageImpl<UserSearchResponse>> searchStaffs(@RequestBody UserSearchRequest request,
+                                                     @PageableDefault(size = 4 ,sort = "userName", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.ok(userService.searchUsers(request, pageable));
     }
 
     @GetMapping("/staffs")

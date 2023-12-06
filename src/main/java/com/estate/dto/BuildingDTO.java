@@ -77,9 +77,9 @@ public class BuildingDTO implements Serializable {
 
     private String map;
 
-    private MultipartFile image;
+    private MultipartFile imageFile;
 
-    private String imageUrl;
+    private String imageName;
 
 
 }

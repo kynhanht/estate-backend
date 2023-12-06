@@ -7,7 +7,6 @@ import com.estate.dto.CustomerDTO;
 import com.estate.dto.request.AssignmentCustomerRequest;
 import com.estate.dto.request.CustomerSearchRequest;
 import com.estate.dto.respone.CustomerSearchResponse;
-import com.estate.dto.respone.PaginationResponse;
 import com.estate.entity.CustomerEntity;
 import com.estate.entity.CustomerEntity_;
 import com.estate.enums.SearchOperationEnum;
@@ -19,7 +18,7 @@ import com.estate.specifications.CustomerSpecification;
 import com.estate.specifications.SearchCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -86,7 +85,7 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public PaginationResponse<CustomerSearchResponse> searchCustomers(CustomerSearchRequest request) {
+    public PageImpl<CustomerSearchResponse> searchCustomers(CustomerSearchRequest request, Pageable pageable) {
 
         CustomerSpecification customerSpecification = new CustomerSpecification();
 
@@ -95,10 +94,8 @@ public class CustomerService implements ICustomerService {
                 .and(customerSpecification.byCommon(new SearchCriteria(CustomerEntity_.EMAIL, request.getEmail(), SearchOperationEnum.CONTAINING)))
                 .and(customerSpecification.byCommon(new SearchCriteria(CustomerEntity_.PHONE, request.getPhone(), SearchOperationEnum.CONTAINING)))
                 .and(customerSpecification.byCommon(new SearchCriteria(CustomerEntity_.STATUS, SystemConstants.ACTIVE_STATUS, SearchOperationEnum.EQUAL)))
-                .and(customerSpecification.byStaffId(request.getStaffId()))
-                .and(customerSpecification.orderBy(request.getSortColumnName(), request.getSortDirection()));
+                .and(customerSpecification.byStaffId(request.getStaffId()));
 
-        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getPageSize());
         Page<CustomerEntity> page = customerRepository.findAll(specification, pageable);
 
         List<CustomerSearchResponse> responses = page
@@ -107,13 +104,8 @@ public class CustomerService implements ICustomerService {
                 .map(customerConveter::convertToCustomerSearchResponse)
                 .collect(Collectors.toList());
 
-        PaginationResponse<CustomerSearchResponse> paginationResponse = new PaginationResponse<>();
-        paginationResponse.setPage(request.getPage());
-        paginationResponse.setTotalPages(page.getTotalPages());
-        paginationResponse.setPageSize(request.getPageSize());
-        paginationResponse.setTotalItems((int) page.getTotalElements());
-        paginationResponse.setListResult(responses);
-        return paginationResponse;
+
+        return new PageImpl<>(responses, page.getPageable(), page.getTotalElements());
     }
 
     @Override

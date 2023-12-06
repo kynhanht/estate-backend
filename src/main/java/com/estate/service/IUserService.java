@@ -3,16 +3,17 @@ package com.estate.service;
 import com.estate.dto.UserDTO;
 import com.estate.dto.request.PasswordRequest;
 import com.estate.dto.request.UserSearchRequest;
-import com.estate.dto.respone.PaginationResponse;
 import com.estate.dto.respone.StaffResponse;
 import com.estate.dto.respone.UserSearchResponse;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
 
 public interface IUserService {
 
-    PaginationResponse<UserSearchResponse> searchUsers(UserSearchRequest request);
+    PageImpl<UserSearchResponse> searchUsers(UserSearchRequest request, Pageable pageable);
 
     UserDTO findUserByUserName(String userName);
 
