@@ -1,5 +1,6 @@
 package com.estate.controller;
 
+import com.estate.dto.BuildingDTO;
 import com.estate.dto.CustomerDTO;
 import com.estate.dto.request.AssignmentCustomerRequest;
 import com.estate.dto.request.CustomerSearchRequest;
@@ -8,7 +9,7 @@ import com.estate.dto.respone.StaffResponse;
 import com.estate.service.ICustomerService;
 import com.estate.service.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -27,16 +28,18 @@ public class CustomerController {
 
     private final IUserService userService;
 
+
+
     @PostMapping("/search")
-    public ResponseEntity<PageImpl<CustomerSearchResponse>> searchCustomers(@RequestBody CustomerSearchRequest request, @PageableDefault(size = 4 ,sort = "fullName", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<CustomerSearchResponse>> searchCustomers(@RequestBody CustomerSearchRequest request, @PageableDefault(size = 4 ,sort = "fullName", direction = Sort.Direction.ASC) Pageable pageable) {
 
         return ResponseEntity.ok(customerService.searchCustomers(request, pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable("id") Long id) {
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable("id") Long id) {
 
-        return ResponseEntity.ok(customerService.getCustomerById(id));
+        return ResponseEntity.ok(customerService.findCustomerById(id));
     }
 
     @PostMapping
@@ -57,18 +60,13 @@ public class CustomerController {
         if (ids != null && !ids.isEmpty()) {
             customerService.deleteCustomers(ids);
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/assignment-customer")
     public ResponseEntity<Void> assignCustomer(@RequestBody AssignmentCustomerRequest request) {
         customerService.assignCustomer(request);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{customerId}/staffs")
-    public ResponseEntity<List<StaffResponse>> loadStaffs(@PathVariable Long customerId) {
-
-        return ResponseEntity.ok(userService.findStaffByCustomerId(customerId));
-    }
 }

@@ -38,7 +38,7 @@ public class CustomerService implements ICustomerService {
     private final CustomerConveter customerConveter;
 
     @Override
-    public CustomerDTO getCustomerById(Long id) {
+    public CustomerDTO findCustomerById(Long id) {
 
         CustomerEntity customerEntity = customerRepository
                 .findById(id).orElseThrow(() -> new NotFoundException(ErrorMessageConstants.CUSTOMER_NOT_FOUND));
@@ -85,7 +85,7 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public PageImpl<CustomerSearchResponse> searchCustomers(CustomerSearchRequest request, Pageable pageable) {
+    public Page<CustomerSearchResponse> searchCustomers(CustomerSearchRequest request, Pageable pageable) {
 
         CustomerSpecification customerSpecification = new CustomerSpecification();
 

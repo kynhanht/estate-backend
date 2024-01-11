@@ -25,10 +25,7 @@ public class CustomerConveter {
     }
 
     public CustomerSearchResponse convertToCustomerSearchResponse(CustomerEntity customerEntity) {
-
-        CustomerSearchResponse response = modelMapper.map(customerEntity, CustomerSearchResponse.class);
-        response.setModifiedDate(DateUtils.convertDateToString(customerEntity.getModifiedDate()));
-        return response;
+        return modelMapper.map(customerEntity, CustomerSearchResponse.class);
     }
 
 }

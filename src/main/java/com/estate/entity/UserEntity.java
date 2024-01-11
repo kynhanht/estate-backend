@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
-public class UserEntity extends BaseEntity {
+public class UserEntity extends AbstractEntity {
 
     @Column(name = "username", nullable = false, unique = true)
     private String userName;

@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "customers")
 @Getter
 @Setter
-public class CustomerEntity extends BaseEntity {
+public class CustomerEntity extends AbstractEntity {
 
 
     @Column(name = "full_name")

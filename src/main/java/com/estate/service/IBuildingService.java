@@ -4,13 +4,13 @@ import com.estate.dto.BuildingDTO;
 import com.estate.dto.request.AssignmentBuildingRequest;
 import com.estate.dto.request.BuildingSearchRequest;
 import com.estate.dto.respone.BuildingSearchResponse;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface IBuildingService {
-    PageImpl<BuildingSearchResponse> searchBuildings(BuildingSearchRequest request, Pageable pageable);
+    Page<BuildingSearchResponse> searchBuildings(BuildingSearchRequest request, Pageable pageable);
 
     BuildingDTO findBuildingById(Long id);
 

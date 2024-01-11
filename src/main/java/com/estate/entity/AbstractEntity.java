@@ -13,17 +13,17 @@ import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners({AuditingEntityListener.class})
 @Getter
 @Setter
-public class BaseEntity implements Serializable {
+public class AbstractEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "created_date")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @CreatedDate
     private Date createdDate;
 
@@ -32,8 +32,9 @@ public class BaseEntity implements Serializable {
     private String createdBy;
 
     @Column(name = "modified_date")
-    @Temporal(TemporalType.TIMESTAMP)
+
     @LastModifiedDate
+    @Temporal(TemporalType.DATE)
     private Date modifiedDate;
 
     @Column(name = "modified_by")

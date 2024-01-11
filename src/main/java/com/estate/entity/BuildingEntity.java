@@ -6,13 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "buildings")
 @Getter
 @Setter
-public class BuildingEntity extends BaseEntity {
+public class BuildingEntity extends AbstractEntity {
 
 
     @Column(name = "building_name")
@@ -76,10 +77,12 @@ public class BuildingEntity extends BaseEntity {
     private String payment;
 
     @Column(name = "rent_time")
-    private String rentTime;
+    @Temporal(TemporalType.DATE)
+    private Date rentTime;
 
     @Column(name = "decoration_time")
-    private String decorationTime;
+    @Temporal(TemporalType.DATE)
+    private Date decorationTime;
 
     @Column(name = "brokerage_fee")
     private String brokerageFee;

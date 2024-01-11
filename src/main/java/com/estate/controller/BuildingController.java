@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -45,8 +46,8 @@ public class BuildingController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<PageImpl<BuildingSearchResponse>> searchBuildings(@RequestBody BuildingSearchRequest request,
-                                                                            @PageableDefault(size = 4 ,sort = "buildingName", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<BuildingSearchResponse>> searchBuildings(@RequestBody BuildingSearchRequest request,
+                                                                        @PageableDefault(size = 4 ,sort = "buildingName", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.searchBuildings(request, pageable));
     }
 
@@ -98,7 +99,7 @@ public class BuildingController {
     }
 
 
-    @PostMapping("/assignment")
+    @PostMapping("/assignment-building")
     public ResponseEntity<Void> assignBuilding(@RequestBody AssignmentBuildingRequest request) {
         buildingService.assignBuilding(request);
         return ResponseEntity.ok().build();

@@ -40,7 +40,7 @@ public class BuildingService implements IBuildingService {
     private final IFileStorageService fileStorageService;
 
     @Override
-    public PageImpl<BuildingSearchResponse> searchBuildings(BuildingSearchRequest request, Pageable pageable) {
+    public Page<BuildingSearchResponse> searchBuildings(BuildingSearchRequest request, Pageable pageable) {
 
 
         BuildingSpecification buildingSpecification = new BuildingSpecification();
@@ -102,6 +102,13 @@ public class BuildingService implements IBuildingService {
         if(buildingDTO.getImageFile() != null){
             String fileName = fileStorageService.storeImageFile(buildingDTO.getImageFile());
             newBuildingEntity.setImageName(fileName);
+            if(oldBuildingEntity.getImageName()!=null){
+                fileStorageService.deleteImageFile(oldBuildingEntity.getImageName());
+            }
+        }else{
+            if(buildingDTO.getImageName()!= null && buildingDTO.getImageName().equals(oldBuildingEntity.getImageName())){
+                newBuildingEntity.setImageName(oldBuildingEntity.getImageName());
+            }
         }
         BuildingEntity _buildingEntity = buildingRepository.save(newBuildingEntity);
         return buildingConverter.convertToDTO(_buildingEntity);

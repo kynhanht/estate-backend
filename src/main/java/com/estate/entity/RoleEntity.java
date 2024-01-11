@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "role")
 @Getter
 @Setter
-public class RoleEntity extends BaseEntity {
+public class RoleEntity extends AbstractEntity {
 
 
     @Column(nullable = false)

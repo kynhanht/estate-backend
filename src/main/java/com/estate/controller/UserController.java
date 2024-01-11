@@ -2,17 +2,21 @@ package com.estate.controller;
 
 import com.estate.dto.AuthToken;
 import com.estate.dto.UserDTO;
-import com.estate.dto.request.PasswordRequest;
+import com.estate.dto.request.UserPasswordRequest;
+import com.estate.dto.request.UserProfileRequest;
 import com.estate.dto.request.UserSearchRequest;
 import com.estate.dto.respone.StaffResponse;
+import com.estate.dto.respone.UserProfileResponse;
 import com.estate.dto.respone.UserSearchResponse;
 import com.estate.security.JwtTokenProvider;
+import com.estate.service.IRoleService;
 import com.estate.service.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +39,13 @@ public class UserController {
 
     private final IUserService userService;
 
+    private final IRoleService roleService;
+
+    @GetMapping("/roles")
+    public ResponseEntity<Map<String, String>> getRoles() {
+        return ResponseEntity.ok(roleService.getRoles());
+    }
+
     @PostMapping("/authentication")
     public ResponseEntity<?> authentication(@RequestBody UserDTO userDTO) throws AuthenticationException {
 
@@ -49,55 +60,25 @@ public class UserController {
         return ResponseEntity.ok(new AuthToken(token));
     }
 
-
     @PostMapping("/search")
-    public ResponseEntity<PageImpl<UserSearchResponse>> searchStaffs(@RequestBody UserSearchRequest request,
-                                                     @PageableDefault(size = 4 ,sort = "userName", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<UserSearchResponse>> searchStaffs(@RequestBody UserSearchRequest request,
+                                                                 @PageableDefault(size = 4 ,sort = "userName", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(userService.searchUsers(request, pageable));
     }
 
-    @GetMapping("/staffs")
-    public ResponseEntity<Map<Long, String>> getStaffs() {
-        return ResponseEntity.ok(userService.getStaffs());
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") long id) {
+        return ResponseEntity.ok(userService.findUserById(id));
     }
-
-
-    @GetMapping("/{buildingId}")
-    public ResponseEntity<List<StaffResponse>> getStaffsByBuildingId(@PathVariable Long buildingId) {
-
-        return ResponseEntity.ok(userService.findStaffsByBuildingId(buildingId));
-    }
-
-    @GetMapping("/{username}")
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable("username") String username) {
-        return ResponseEntity.ok(userService.findUserByUserName(username));
-    }
-
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUsers(@RequestBody UserDTO newUser) {
-        return ResponseEntity.ok(userService.createUser(newUser));
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUsers(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.updateUser(id, userDTO));
-    }
-
-    @PutMapping("/change-password/{id}")
-    public ResponseEntity<String> changePasswordUser(@PathVariable("id") Long id, @RequestBody PasswordRequest passwordRequest) {
-        userService.updatePassword(id, passwordRequest);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/password/{id}/reset")
-    public ResponseEntity<UserDTO> resetPassword(@PathVariable("id") long id) {
-        return ResponseEntity.ok(userService.resetPassword(id));
-    }
-
-    @PutMapping("/profile/{username}")
-    public ResponseEntity<UserDTO> updateProfileOfUser(@PathVariable("username") String username, @RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userService.updateProfileOfUser(username, userDTO));
     }
 
     @DeleteMapping
@@ -105,12 +86,42 @@ public class UserController {
         if (ids != null && !ids.isEmpty()) {
             userService.deleteUsers(ids);
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{buildingId}/staffs")
-    public ResponseEntity<List<StaffResponse>> loadStaff(@PathVariable Long buildingId) {
+    @GetMapping("/staffs")
+    public ResponseEntity<Map<Long, String>> getStaffs() {
+        return ResponseEntity.ok(userService.getStaffs());
+    }
+
+    @PutMapping("/{id}/change-password")
+    public ResponseEntity<String> changeUserPassword(@PathVariable("id") Long id, @RequestBody UserPasswordRequest userPasswordRequest) {
+        userService.updatePassword(id, userPasswordRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/reset-password")
+    public ResponseEntity<UserDTO> resetUserPassword(@PathVariable("id") long id) {
+        return ResponseEntity.ok(userService.resetPassword(id));
+    }
+
+    @GetMapping("/profile/{userName}")
+    public ResponseEntity<UserProfileResponse> getProfileUserByUserName(@PathVariable("userName") String userName) {
+        return ResponseEntity.ok(userService.findUserByUserName(userName));
+    }
+    @PutMapping("/profile/{userName}")
+    public ResponseEntity<UserProfileResponse> updateProfileUser(@PathVariable("userName") String username, @RequestBody UserProfileRequest request) {
+        return ResponseEntity.ok(userService.updateUserProfile(username, request));
+    }
+
+    @GetMapping("/{buildingId}/building-staffs")
+    public ResponseEntity<List<StaffResponse>> loadStaffByBuildingId(@PathVariable Long buildingId) {
 
         return ResponseEntity.ok(userService.findStaffsByBuildingId(buildingId));
+    }
+    @GetMapping("/{customerId}/customer-staffs")
+    public ResponseEntity<List<StaffResponse>> loadStaffsByCustomerId(@PathVariable Long customerId) {
+
+        return ResponseEntity.ok(userService.findStaffsByCustomerId(customerId));
     }
 }

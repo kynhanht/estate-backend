@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class PasswordRequest implements Serializable {
+public class UserPasswordRequest implements Serializable {
 
     private String oldPassword;
 

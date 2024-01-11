@@ -39,7 +39,7 @@ public class TransactionService implements ITransactionService {
                 .forEach(transactionEnum -> {
                     TransactionResponse response = new TransactionResponse();
                     response.setCode(transactionEnum.toString());
-                    response.setTransactionValue(transactionEnum.getTransactionValue());
+                    response.setValue(transactionEnum.getTransactionValue());
                     responses.add(response);
 
                 });

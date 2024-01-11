@@ -14,7 +14,7 @@ public class TransactionResponse implements Serializable {
 
     private String code;
 
-    private String transactionValue;
+    private String value;
 
     private List<TransactionDTO> transactions = new ArrayList<>();
 

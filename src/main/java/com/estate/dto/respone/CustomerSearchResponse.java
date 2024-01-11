@@ -1,9 +1,11 @@
 package com.estate.dto.respone;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 @Getter
@@ -22,7 +24,8 @@ public class CustomerSearchResponse implements Serializable {
 
     private String modifiedBy;
 
-    private String modifiedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date modifiedDate;
 
     private String status;
 

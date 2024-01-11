@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table(name = "rent_area")
 @Getter
 @Setter
-public class RentAreaEntity extends BaseEntity {
+public class RentAreaEntity extends AbstractEntity {
 
     @Column(name = "value")
     private Double value;

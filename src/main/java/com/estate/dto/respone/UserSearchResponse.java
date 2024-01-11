@@ -15,5 +15,11 @@ public class UserSearchResponse implements Serializable {
 
     private String fullName;
 
+    private String phone;
+
+    private String email;
+
+    private Integer status;
+
     private String roleCode;
 }

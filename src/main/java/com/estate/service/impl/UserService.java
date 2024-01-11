@@ -4,11 +4,13 @@ import com.estate.constant.ErrorMessageConstants;
 import com.estate.constant.SystemConstants;
 import com.estate.converter.UserConverter;
 import com.estate.dto.UserDTO;
-import com.estate.dto.request.PasswordRequest;
+import com.estate.dto.request.UserPasswordRequest;
+import com.estate.dto.request.UserProfileRequest;
 import com.estate.dto.request.UserSearchRequest;
 import com.estate.dto.respone.StaffResponse;
+import com.estate.dto.respone.UserProfileResponse;
 import com.estate.dto.respone.UserSearchResponse;
-import com.estate.entity.BaseEntity;
+import com.estate.entity.AbstractEntity;
 import com.estate.entity.RoleEntity;
 import com.estate.entity.UserEntity;
 import com.estate.entity.UserEntity_;
@@ -49,7 +51,7 @@ public class UserService implements IUserService {
 
 
     @Override
-    public PageImpl<UserSearchResponse> searchUsers(UserSearchRequest request, Pageable pageable) {
+    public Page<UserSearchResponse> searchUsers(UserSearchRequest request, Pageable pageable) {
 
         UserSpecification userSpecification = new UserSpecification();
         Specification<UserEntity> specification = Specification
@@ -68,10 +70,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDTO findUserByUserName(String userName) {
-        UserEntity userEntity = userRepository.findOneByUserName(userName)
+    public UserProfileResponse findUserByUserName(String userName) {
+        UserEntity entity = userRepository.findOneByUserName(userName)
                 .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.USER_NOT_FOUND));
-        return userConverter.convertToDTO(userEntity);
+        return userConverter.convertToUserProfileResponse(entity);
     }
 
     @Override
@@ -114,12 +116,12 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public void updatePassword(Long id, PasswordRequest passwordRequest) {
+    public void updatePassword(Long id, UserPasswordRequest userPasswordRequest) {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.USER_NOT_FOUND));
-        if (passwordEncoder.matches(passwordRequest.getOldPassword(), user.getPassword())
-                && passwordRequest.getNewPassword().equals(passwordRequest.getConfirmPassword())) {
-            user.setPassword(passwordEncoder.encode(passwordRequest.getNewPassword()));
+        if (passwordEncoder.matches(userPasswordRequest.getOldPassword(), user.getPassword())
+                && userPasswordRequest.getNewPassword().equals(userPasswordRequest.getConfirmPassword())) {
+            user.setPassword(passwordEncoder.encode(userPasswordRequest.getNewPassword()));
             userRepository.save(user);
         } else {
             throw new InternalException(ErrorMessageConstants.CHANGE_PASSWORD_FAIL);
@@ -138,14 +140,14 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public UserDTO updateProfileOfUser(String userName, UserDTO updateUser) {
-        UserEntity oldUser = userRepository
+    public UserProfileResponse updateUserProfile(String userName, UserProfileRequest request) {
+        UserEntity entity = userRepository
                 .findOneByUserName(userName)
                 .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.USER_NOT_FOUND));
-        oldUser.setFullName(updateUser.getFullName());
-        oldUser.setPhone(updateUser.getPhone());
-        oldUser.setEmail(updateUser.getEmail());
-        return userConverter.convertToDTO(userRepository.save(oldUser));
+        entity.setFullName(request.getFullName());
+        entity.setPhone(request.getPhone());
+        entity.setEmail(request.getEmail());
+        return userConverter.convertToUserProfileResponse(userRepository.save(entity));
     }
 
     @Override
@@ -183,7 +185,7 @@ public class UserService implements IUserService {
                     // Map into List of buildingId
                     List<Long> buildingIds = staff.getBuildings()
                             .stream()
-                            .map(BaseEntity::getId)
+                            .map(AbstractEntity::getId)
                             .toList();
                     // Check List of buildingId contain request building
                     if (buildingIds.contains(buildingId)) staffRespone.setChecked(true);
@@ -193,7 +195,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<StaffResponse> findStaffByCustomerId(Long customerId) {
+    public List<StaffResponse> findStaffsByCustomerId(Long customerId) {
         // Get All staff who are active
         List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(SystemConstants.ACTIVE_STATUS, SystemConstants.STAFF);
         // Map to List<StaffResponse>
@@ -205,7 +207,7 @@ public class UserService implements IUserService {
                     // Map into List of buildingId
                     List<Long> customerIds = staff.getCustomers()
                             .stream()
-                            .map(BaseEntity::getId)
+                            .map(AbstractEntity::getId)
                             .toList();
                     // Check List of customerId contain request customerId
                     if (customerIds.contains(customerId)) staffRespone.setChecked(true);
