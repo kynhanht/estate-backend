@@ -1,11 +1,9 @@
 package com.estate.controller;
 
-import com.estate.dto.BuildingDTO;
 import com.estate.dto.CustomerDTO;
 import com.estate.dto.request.AssignmentCustomerRequest;
 import com.estate.dto.request.CustomerSearchRequest;
 import com.estate.dto.respone.CustomerSearchResponse;
-import com.estate.dto.respone.StaffResponse;
 import com.estate.service.ICustomerService;
 import com.estate.service.IUserService;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,6 @@ package com.estate.converter;
 import com.estate.dto.CustomerDTO;
 import com.estate.dto.respone.CustomerSearchResponse;
 import com.estate.entity.CustomerEntity;
-import com.estate.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
