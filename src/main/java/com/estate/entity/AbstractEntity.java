@@ -32,7 +32,6 @@ public class AbstractEntity implements Serializable {
     private String createdBy;
 
     @Column(name = "modified_date")
-
     @LastModifiedDate
     @Temporal(TemporalType.DATE)
     private Date modifiedDate;

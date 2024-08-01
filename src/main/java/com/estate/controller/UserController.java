@@ -1,6 +1,5 @@
 package com.estate.controller;
 
-import com.estate.dto.AuthToken;
 import com.estate.dto.UserDTO;
 import com.estate.dto.request.UserPasswordRequest;
 import com.estate.dto.request.UserProfileRequest;
@@ -8,7 +7,6 @@ import com.estate.dto.request.UserSearchRequest;
 import com.estate.dto.respone.StaffResponse;
 import com.estate.dto.respone.UserProfileResponse;
 import com.estate.dto.respone.UserSearchResponse;
-import com.estate.security.JwtTokenProvider;
 import com.estate.service.IRoleService;
 import com.estate.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,10 +26,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final AuthenticationManager authenticationManager;
-
-    private final JwtTokenProvider jwtTokenUtil;
-
     private final IUserService userService;
 
     private final IRoleService roleService;
@@ -46,19 +35,6 @@ public class UserController {
         return ResponseEntity.ok(roleService.getRoles());
     }
 
-    @PostMapping("/authentication")
-    public ResponseEntity<?> authentication(@RequestBody UserDTO userDTO) throws AuthenticationException {
-
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userDTO.getUserName(),
-                        userDTO.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(token));
-    }
 
     @PostMapping("/search")
     public ResponseEntity<Page<UserSearchResponse>> searchStaffs(@RequestBody UserSearchRequest request,

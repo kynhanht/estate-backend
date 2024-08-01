@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public final class BuildingSpecification extends GenericSpecification<BuildingEntity> {
+public class BuildingSpecification extends GenericSpecification<BuildingEntity> {
 
     public Specification<BuildingEntity> byBuildingTypes(List<String> buildingTypes) {
         return (root, query, criteriaBuilder) -> {

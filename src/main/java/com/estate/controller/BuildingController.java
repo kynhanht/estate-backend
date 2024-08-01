@@ -3,7 +3,6 @@ package com.estate.controller;
 import com.estate.dto.BuildingDTO;
 import com.estate.dto.request.AssignmentBuildingRequest;
 import com.estate.dto.request.BuildingSearchRequest;
-import com.estate.dto.respone.BuildingSearchResponse;
 import com.estate.exception.FileStorageException;
 import com.estate.service.IBuildingService;
 import com.estate.service.IFileStorageService;
@@ -13,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -25,7 +23,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/buildings")
@@ -45,19 +42,19 @@ public class BuildingController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<Page<BuildingSearchResponse>> searchBuildings(@RequestBody BuildingSearchRequest request,
+    public ResponseEntity<?> searchBuildings(@RequestBody BuildingSearchRequest request,
                                                                         @PageableDefault(size = 4 ,sort = "buildingName", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.searchBuildings(request, pageable));
     }
 
     @GetMapping("/districts")
-    public ResponseEntity<Map<String, String>> getDistricts() {
+    public ResponseEntity<?> getDistricts() {
 
         return ResponseEntity.status(HttpStatus.OK).body(SystemUtils.getDistricts());
     }
 
     @GetMapping("/types")
-    public ResponseEntity<Map<String, String>> getBuildingTypes() {
+    public ResponseEntity<?> getBuildingTypes() {
         return ResponseEntity.status(HttpStatus.OK).body(SystemUtils.getBuildingTypes());
     }
 
@@ -89,7 +86,7 @@ public class BuildingController {
 
 
     @DeleteMapping
-    public ResponseEntity<Void> removeBuildings(@RequestBody List<Long> ids) {
+    public ResponseEntity<?> removeBuildings(@RequestBody List<Long> ids) {
 
         if (ids != null && !ids.isEmpty()) {
             buildingService.deleteBuildings(ids);
@@ -99,7 +96,7 @@ public class BuildingController {
 
 
     @PostMapping("/assignment-building")
-    public ResponseEntity<Void> assignBuilding(@RequestBody AssignmentBuildingRequest request) {
+    public ResponseEntity<?> assignBuilding(@RequestBody AssignmentBuildingRequest request) {
         buildingService.assignBuilding(request);
         return ResponseEntity.ok().build();
     }
