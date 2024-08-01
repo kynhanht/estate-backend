@@ -3,9 +3,11 @@ package com.estate.dto.respone;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class UserProfileResponse {
+public class UserProfileResponse implements Serializable {
 
     private Long id;
 

@@ -3,9 +3,11 @@ package com.estate.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private Long id;
 

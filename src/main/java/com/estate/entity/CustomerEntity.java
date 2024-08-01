@@ -14,7 +14,6 @@ import java.util.List;
 @Setter
 public class CustomerEntity extends AbstractEntity {
 
-
     @Column(name = "full_name")
     private String fullName;
 
@@ -36,7 +35,7 @@ public class CustomerEntity extends AbstractEntity {
     @Column(name = "status")
     private Integer status;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "assignment_customer",
             joinColumns = @JoinColumn(name = "customer_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "staff_id", nullable = false))

@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -65,7 +66,7 @@ public class JwtTokenProvider implements Serializable {
                         && !isTokenExpired(token));
     }
 
-    UsernamePasswordAuthenticationToken getAuthentication(final String token, final UserDetails userDetails) {
+    public UsernamePasswordAuthenticationToken getAuthentication(final String token, final UserDetails userDetails) {
 
         final JwtParser jwtParser = Jwts.parser().setSigningKey(SystemConstants.SIGNING_KEY);
 
@@ -80,5 +81,18 @@ public class JwtTokenProvider implements Serializable {
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
+
+
+    public String getRole(Authentication authentication){
+
+        final List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+        if(roles.isEmpty()) return null;
+        return roles.get(0);
+
+    }
+
+
 
 }
