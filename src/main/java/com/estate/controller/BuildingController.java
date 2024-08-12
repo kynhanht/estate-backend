@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -86,6 +87,7 @@ public class BuildingController {
 
 
     @DeleteMapping
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> removeBuildings(@RequestBody List<Long> ids) {
 
         if (ids != null && !ids.isEmpty()) {
