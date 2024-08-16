@@ -84,7 +84,7 @@ public class BuildingService implements IBuildingService {
     @Transactional
     public BuildingDTO createBuilding(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-        if(buildingDTO.getImageFile() != null){
+        if (buildingDTO.getImageFile() != null) {
             String fileName = fileStorageService.storeImageFile(buildingDTO.getImageFile());
             buildingEntity.setImageName(fileName);
         }
@@ -99,14 +99,14 @@ public class BuildingService implements IBuildingService {
         newBuildingEntity.setUsers(oldBuildingEntity.getUsers());
         newBuildingEntity.setCreatedBy(oldBuildingEntity.getCreatedBy());
         newBuildingEntity.setCreatedDate(oldBuildingEntity.getCreatedDate());
-        if(buildingDTO.getImageFile() != null){
+        if (buildingDTO.getImageFile() != null) {
             String fileName = fileStorageService.storeImageFile(buildingDTO.getImageFile());
             newBuildingEntity.setImageName(fileName);
-            if(oldBuildingEntity.getImageName()!=null){
+            if (oldBuildingEntity.getImageName() != null) {
                 fileStorageService.deleteImageFile(oldBuildingEntity.getImageName());
             }
-        }else{
-            if(buildingDTO.getImageName()!= null && buildingDTO.getImageName().equals(oldBuildingEntity.getImageName())){
+        } else {
+            if (buildingDTO.getImageName() != null && buildingDTO.getImageName().equals(oldBuildingEntity.getImageName())) {
                 newBuildingEntity.setImageName(oldBuildingEntity.getImageName());
             }
         }

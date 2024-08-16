@@ -13,6 +13,6 @@ public class TransactionConverter {
     private final ModelMapper modelMapper;
 
     public TransactionDTO convertToDTO(TransactionEntity transactionEntity) {
-        return  modelMapper.map(transactionEntity, TransactionDTO.class);
+        return modelMapper.map(transactionEntity, TransactionDTO.class);
     }
 }

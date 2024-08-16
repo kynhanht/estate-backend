@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class CustomerController {
     private final ICustomerService customerService;
 
     @PostMapping("/search")
-    public ResponseEntity<Page<CustomerSearchResponse>> searchCustomers(@RequestBody CustomerSearchRequest request, @PageableDefault(size = 4 ,sort = "fullName", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<CustomerSearchResponse>> searchCustomers(@RequestBody CustomerSearchRequest request, @PageableDefault(size = 4, sort = "fullName", direction = Sort.Direction.ASC) Pageable pageable) {
 
         return ResponseEntity.ok(customerService.searchCustomers(request, pageable));
     }
@@ -36,6 +37,7 @@ public class CustomerController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(customerDTO));
     }
@@ -48,6 +50,7 @@ public class CustomerController {
 
 
     @DeleteMapping
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> removeCustomers(@RequestBody List<Long> ids) {
 
         if (ids != null && !ids.isEmpty()) {
@@ -57,6 +60,7 @@ public class CustomerController {
     }
 
     @PostMapping("/assignment-customer")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Void> assignCustomer(@RequestBody AssignmentCustomerRequest request) {
         customerService.assignCustomer(request);
         return ResponseEntity.ok().build();

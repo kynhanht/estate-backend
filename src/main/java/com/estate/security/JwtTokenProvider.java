@@ -26,7 +26,7 @@ public class JwtTokenProvider implements Serializable {
     }
 
     public Date getExpirationDateFromToken(String token) {
-            return getClaimFromToken(token, Claims::getExpiration);
+        return getClaimFromToken(token, Claims::getExpiration);
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -83,16 +83,15 @@ public class JwtTokenProvider implements Serializable {
     }
 
 
-    public String getRole(Authentication authentication){
+    public String getRole(Authentication authentication) {
 
         final List<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
-        if(roles.isEmpty()) return null;
+        if (roles.isEmpty()) return null;
         return roles.get(0);
 
     }
-
 
 
 }

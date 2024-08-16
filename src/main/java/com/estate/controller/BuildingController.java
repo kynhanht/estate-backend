@@ -44,7 +44,7 @@ public class BuildingController {
 
     @PostMapping("/search")
     public ResponseEntity<?> searchBuildings(@RequestBody BuildingSearchRequest request,
-                                                                        @PageableDefault(size = 4 ,sort = "buildingName", direction = Sort.Direction.ASC) Pageable pageable) {
+                                             @PageableDefault(size = 4, sort = "buildingName", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(buildingService.searchBuildings(request, pageable));
     }
 
@@ -63,6 +63,7 @@ public class BuildingController {
             MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> createBuilding(@Valid @ModelAttribute BuildingDTO buildingDTO, BindingResult bindingResult) {
         ResponseEntity<?> responseEntity = mapValidationErrorService.mapValidationFields(bindingResult);
         if (responseEntity != null) {
@@ -98,6 +99,7 @@ public class BuildingController {
 
 
     @PostMapping("/assignment-building")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> assignBuilding(@RequestBody AssignmentBuildingRequest request) {
         buildingService.assignBuilding(request);
         return ResponseEntity.ok().build();
@@ -109,11 +111,11 @@ public class BuildingController {
         String contentType;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new FileStorageException("Could not determine file type", ex);
         }
 
-        if(contentType== null){
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 

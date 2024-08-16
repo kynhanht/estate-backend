@@ -46,7 +46,7 @@ public class CustomExceptionHandler {
     }
 
 
-    @ExceptionHandler({ AuthenticationException.class })
+    @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<ErrorMessage> handleAuthenticationException(Exception ex) {
         Logger logger = LoggerFactory.getLogger(AuthenticationException.class);
         logger.error("Runtime error: {}", ex.getMessage());
@@ -54,7 +54,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
     }
 
-    @ExceptionHandler({ AccessDeniedException.class })
+    @ExceptionHandler({AccessDeniedException.class})
     public ResponseEntity<ErrorMessage> handleAccessDeniedException(Exception ex) {
         Logger logger = LoggerFactory.getLogger(AccessDeniedException.class);
         logger.error("Runtime error: {}", ex.getMessage());

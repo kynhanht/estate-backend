@@ -73,7 +73,7 @@ public class FileStorageService implements IFileStorageService {
         }
     }
 
-    public void deleteImageFile(String filename){
+    public void deleteImageFile(String filename) {
         deleteFile(fileImageStorageLocation, filename);
     }
 

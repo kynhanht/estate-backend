@@ -16,7 +16,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)  {
-        handlerExceptionResolver.resolveException(request,response,null, accessDeniedException);
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) {
+        handlerExceptionResolver.resolveException(request, response, null, accessDeniedException);
     }
 }

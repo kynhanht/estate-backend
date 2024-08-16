@@ -16,7 +16,7 @@ public class UserConverter {
 
     public UserDTO convertToDTO(UserEntity entity) {
 
-        UserDTO dto =  modelMapper.map(entity, UserDTO.class);
+        UserDTO dto = modelMapper.map(entity, UserDTO.class);
         if (!entity.getRoles().isEmpty()) {
             dto.setRoleCode(entity.getRoles().get(0).getCode());
         }
