@@ -1,6 +1,7 @@
 package com.estate.security;
 
 import com.estate.constant.SystemConstants;
+import com.estate.dto.CustomUserDetail;
 import io.jsonwebtoken.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -84,12 +85,17 @@ public class JwtTokenProvider implements Serializable {
 
 
     public String getRole(Authentication authentication) {
-
         final List<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
         if (roles.isEmpty()) return null;
         return roles.get(0);
+
+    }
+
+    public String getFullName(Authentication authentication) {
+        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+        return userDetail.getFullName();
 
     }
 

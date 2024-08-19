@@ -11,11 +11,11 @@ public class LoginResponse implements Serializable {
 
     private String token;
     private String roleCode;
+    private String fullName;
 
-    public LoginResponse(String token, String roleCode) {
+    public LoginResponse(String token, String roleCode, String fullName) {
         this.token = token;
         this.roleCode = roleCode;
+        this.fullName = fullName;
     }
-
-
 }

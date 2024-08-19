@@ -41,7 +41,6 @@ public class FileStorageService implements IFileStorageService {
         UUID uuid = UUID.randomUUID();
         String ext = StringUtils.getFilenameExtension(file.getOriginalFilename());
         String filename = uuid + "." + ext;
-        System.out.println(filename);
         try {
             if (filename.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence: " + filename);

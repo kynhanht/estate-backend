@@ -2,7 +2,7 @@ package com.estate.service.impl;
 
 import com.estate.constant.ErrorMessageConstants;
 import com.estate.constant.SystemConstants;
-import com.estate.dto.MyUserDetail;
+import com.estate.dto.CustomUserDetail;
 import com.estate.entity.RoleEntity;
 import com.estate.entity.UserEntity;
 import com.estate.exception.NotFoundException;
@@ -34,9 +34,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         for (RoleEntity role : userEntity.getRoles()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getCode()));
         }
-        MyUserDetail myUserDetail = new MyUserDetail(username, userEntity.getPassword(), true, true, true, true, authorities);
-        myUserDetail.setId(userEntity.getId());
-        myUserDetail.setFullName(userEntity.getFullName());
-        return myUserDetail;
+        CustomUserDetail customUserDetail = new CustomUserDetail(username, userEntity.getPassword(), true, true, true, true, authorities);
+        customUserDetail.setId(userEntity.getId());
+        customUserDetail.setFullName(userEntity.getFullName());
+        return customUserDetail;
     }
 }
