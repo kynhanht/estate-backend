@@ -2,9 +2,9 @@ package com.estate.enums;
 
 public enum TransactionEnum {
 
-    TRANSACTION_1("Customer Service Progress"),
-    TRANSACTION_2("Take Guest To See"),
-    TRANSACTION_3("Contract");
+    TRANSACTION_1("Quá trình chăm sóc khách hàng"),
+    TRANSACTION_2("Đưa khách đi xem"),
+    TRANSACTION_3("Ký hợp đồng");
 
     private final String transactionValue;
 

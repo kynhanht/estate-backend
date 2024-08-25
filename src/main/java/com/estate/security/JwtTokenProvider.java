@@ -99,5 +99,11 @@ public class JwtTokenProvider implements Serializable {
 
     }
 
+    public String getUsername(Authentication authentication) {
+        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+        return userDetail.getUsername();
+
+    }
+
 
 }
