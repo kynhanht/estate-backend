@@ -9,11 +9,11 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long>, JpaSpecificationExecutor<UserEntity> {
 
-    Optional<UserEntity> findOneByUserNameAndStatus(String name, int status);
+    Optional<UserEntity> findOneByUsernameAndStatus(String username, int status);
 
     List<UserEntity> findByStatusAndRoles_Code(Integer status, String code);
 
-    Optional<UserEntity> findOneByUserName(String userName);
+    Optional<UserEntity> findOneByUsername(String username);
 
     Long countByIdIn(List<Long> ids);
 

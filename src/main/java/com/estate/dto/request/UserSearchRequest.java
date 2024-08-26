@@ -9,6 +9,6 @@ import java.io.Serializable;
 @Setter
 public class UserSearchRequest implements Serializable {
 
-    private String userName;
+    private String username;
 
 }

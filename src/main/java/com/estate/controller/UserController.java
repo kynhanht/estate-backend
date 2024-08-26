@@ -41,7 +41,7 @@ public class UserController {
     @PostMapping("/search")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Page<UserSearchResponse>> searchStaffs(@RequestBody UserSearchRequest request,
-                                                                 @PageableDefault(size = 4, sort = "userName", direction = Sort.Direction.ASC) Pageable pageable) {
+                                                                 @PageableDefault(size = 4, sort = "username", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(userService.searchUsers(request, pageable));
     }
 
@@ -88,13 +88,13 @@ public class UserController {
         return ResponseEntity.ok(userService.resetPassword(id));
     }
 
-    @GetMapping("/profile/{userName}")
-    public ResponseEntity<UserProfileResponse> getProfileUserByUserName(@PathVariable("userName") String userName) {
-        return ResponseEntity.ok(userService.findUserByUserName(userName));
+    @GetMapping("/profile/{username}")
+    public ResponseEntity<UserProfileResponse> getProfileUserByUserName(@PathVariable("username") String username) {
+        return ResponseEntity.ok(userService.findUserByUserName(username));
     }
 
-    @PutMapping("/profile/{userName}")
-    public ResponseEntity<UserProfileResponse> updateProfileUser(@PathVariable("userName") String username, @RequestBody UserProfileRequest request) {
+    @PutMapping("/profile/{username}")
+    public ResponseEntity<UserProfileResponse> updateProfileUser(@PathVariable("username") String username, @RequestBody UserProfileRequest request) {
         return ResponseEntity.ok(userService.updateUserProfile(username, request));
     }
 

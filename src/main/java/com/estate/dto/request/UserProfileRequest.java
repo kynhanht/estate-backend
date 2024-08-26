@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Setter
 public class UserProfileRequest implements Serializable {
 
-    private String fullName;
+    private String fullname;
 
     private String phone;
 

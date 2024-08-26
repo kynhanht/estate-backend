@@ -14,10 +14,10 @@ import java.util.List;
 public class UserEntity extends AbstractEntity {
 
     @Column(name = "username", nullable = false, unique = true)
-    private String userName;
+    private String username;
 
     @Column(name = "full_name", nullable = false)
-    private String fullName;
+    private String fullname;
 
     @Column(name = "password", nullable = false)
     private String password;

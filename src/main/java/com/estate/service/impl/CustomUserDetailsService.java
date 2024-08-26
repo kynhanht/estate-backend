@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository
-                .findOneByUserNameAndStatus(username, SystemConstants.ACTIVE_STATUS)
+                .findOneByUsernameAndStatus(username, SystemConstants.ACTIVE_STATUS)
                 .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.USER_NOT_FOUND));
 
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -36,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         CustomUserDetail customUserDetail = new CustomUserDetail(username, userEntity.getPassword(), true, true, true, true, authorities);
         customUserDetail.setId(userEntity.getId());
-        customUserDetail.setFullName(userEntity.getFullName());
+        customUserDetail.setFullName(userEntity.getFullname());
         return customUserDetail;
     }
 }

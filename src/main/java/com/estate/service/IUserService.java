@@ -17,7 +17,7 @@ public interface IUserService {
 
     Page<UserSearchResponse> searchUsers(UserSearchRequest request, Pageable pageable);
 
-    UserProfileResponse findUserByUserName(String userName);
+    UserProfileResponse findUserByUserName(String username);
 
     UserDTO findUserById(Long id);
 
@@ -29,7 +29,7 @@ public interface IUserService {
 
     UserDTO resetPassword(Long id);
 
-    UserProfileResponse updateUserProfile(String userName, UserProfileRequest request);
+    UserProfileResponse updateUserProfile(String username, UserProfileRequest request);
 
     void deleteUsers(List<Long> ids);
 

@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Setter
 public class LoginRequest implements Serializable {
 
-    private String userName;
+    private String username;
     private String password;
 
 }

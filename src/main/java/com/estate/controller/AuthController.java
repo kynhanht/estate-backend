@@ -29,7 +29,7 @@ public class AuthController {
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUserName(),
+                        request.getUsername(),
                         request.getPassword()
                 )
         );

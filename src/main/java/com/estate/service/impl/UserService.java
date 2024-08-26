@@ -56,8 +56,8 @@ public class UserService implements IUserService {
         UserSpecification userSpecification = new UserSpecification();
         Specification<UserEntity> specification = Specification
                 .where(userSpecification.byCommon(new SearchCriteria(UserEntity_.STATUS, SystemConstants.ACTIVE_STATUS, SearchOperationEnum.EQUAL)))
-                .and(userSpecification.byCommon(new SearchCriteria(UserEntity_.FULL_NAME, request.getUserName(), SearchOperationEnum.CONTAINING))
-                        .or(userSpecification.byCommon(new SearchCriteria(UserEntity_.USER_NAME, request.getUserName(), SearchOperationEnum.CONTAINING))));
+                .and(userSpecification.byCommon(new SearchCriteria(UserEntity_.FULLNAME, request.getUsername(), SearchOperationEnum.CONTAINING))
+                        .or(userSpecification.byCommon(new SearchCriteria(UserEntity_.USERNAME, request.getUsername(), SearchOperationEnum.CONTAINING))));
 
         Page<UserEntity> page = userRepository.findAll(specification, pageable);
         List<UserSearchResponse> responses = page
@@ -70,8 +70,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserProfileResponse findUserByUserName(String userName) {
-        UserEntity entity = userRepository.findOneByUserName(userName)
+    public UserProfileResponse findUserByUserName(String username) {
+        UserEntity entity = userRepository.findOneByUsername(username)
                 .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.USER_NOT_FOUND));
         return userConverter.convertToUserProfileResponse(entity);
     }
@@ -109,7 +109,7 @@ public class UserService implements IUserService {
         UserEntity oldUser = userRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.USER_NOT_FOUND));
-        oldUser.setFullName(updateUser.getFullName());
+        oldUser.setFullname(updateUser.getFullName());
         oldUser.setRoles(Stream.of(role).collect(Collectors.toList()));
         return userConverter.convertToDTO(userRepository.save(oldUser));
     }
@@ -140,11 +140,11 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public UserProfileResponse updateUserProfile(String userName, UserProfileRequest request) {
+    public UserProfileResponse updateUserProfile(String username, UserProfileRequest request) {
         UserEntity entity = userRepository
-                .findOneByUserName(userName)
+                .findOneByUsername(username)
                 .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.USER_NOT_FOUND));
-        entity.setFullName(request.getFullName());
+        entity.setFullname(request.getFullname());
         entity.setPhone(request.getPhone());
         entity.setEmail(request.getEmail());
         return userConverter.convertToUserProfileResponse(userRepository.save(entity));
@@ -167,7 +167,7 @@ public class UserService implements IUserService {
         Map<Long, String> staffMap = new HashMap<>();
         List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(SystemConstants.ACTIVE_STATUS, SystemConstants.STAFF);
         for (UserEntity userEntity : staffs) {
-            staffMap.put(userEntity.getId(), userEntity.getFullName());
+            staffMap.put(userEntity.getId(), userEntity.getFullname());
         }
         return staffMap;
     }
@@ -180,7 +180,7 @@ public class UserService implements IUserService {
         return staffs.stream().map(staff -> {
                     StaffResponse staffRespone = new StaffResponse();
                     staffRespone.setStaffId(staff.getId());
-                    staffRespone.setFullName(staff.getFullName());
+                    staffRespone.setFullName(staff.getFullname());
                     staffRespone.setChecked(false);
                     // Map into List of buildingId
                     List<Long> buildingIds = staff.getBuildings()
@@ -202,7 +202,7 @@ public class UserService implements IUserService {
         return staffs.stream().map(staff -> {
                     StaffResponse staffRespone = new StaffResponse();
                     staffRespone.setStaffId(staff.getId());
-                    staffRespone.setFullName(staff.getFullName());
+                    staffRespone.setFullName(staff.getFullname());
                     staffRespone.setChecked(false);
                     // Map into List of buildingId
                     List<Long> customerIds = staff.getCustomers()

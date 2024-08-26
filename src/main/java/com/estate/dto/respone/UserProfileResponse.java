@@ -11,11 +11,9 @@ public class UserProfileResponse implements Serializable {
 
     private Long id;
 
-    private String userName;
+    private String username;
 
-    private String fullName;
-
-    private String password;
+    private String fullname;
 
     private String phone;
 
