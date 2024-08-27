@@ -105,5 +105,11 @@ public class JwtTokenProvider implements Serializable {
 
     }
 
+    public Long getId(Authentication authentication) {
+        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+        return userDetail.getId();
+
+    }
+
 
 }

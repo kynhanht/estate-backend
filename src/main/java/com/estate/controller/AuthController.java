@@ -35,9 +35,10 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
+        final Long id = jwtTokenUtil.getId(authentication);
         final String role = jwtTokenUtil.getRole(authentication);
         final String fullName = jwtTokenUtil.getFullName(authentication);
         final String username = jwtTokenUtil.getUsername(authentication);
-        return ResponseEntity.ok(new LoginResponse(token, role, fullName, username));
+        return ResponseEntity.ok(new LoginResponse(token, id, role, fullName, username));
     }
 }

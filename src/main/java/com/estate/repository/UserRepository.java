@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, JpaSpec
 
     List<UserEntity> findByStatusAndRoles_Code(Integer status, String code);
 
-    Optional<UserEntity> findOneByUsername(String username);
+//    Optional<UserEntity> findOneByUsername(String username);
 
     Long countByIdIn(List<Long> ids);
 

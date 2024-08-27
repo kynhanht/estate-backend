@@ -17,7 +17,7 @@ public class UserEntity extends AbstractEntity {
     private String username;
 
     @Column(name = "full_name", nullable = false)
-    private String fullname;
+    private String fullName;
 
     @Column(name = "password", nullable = false)
     private String password;
