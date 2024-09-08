@@ -56,7 +56,7 @@ public class JwtTokenProvider implements Serializable {
                 .claim(SystemConstants.AUTHORITIES_KEY, authorities)
                 .signWith(SignatureAlgorithm.HS256, SystemConstants.SIGNING_KEY)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + SystemConstants.ACCESS_TOKEN_VALIDITY_SECONDS))
+                .setExpiration(new Date(System.currentTimeMillis() + SystemConstants.ACCESS_TOKEN_VALIDITY_MILLISECONDS))
                 .compact();
     }
 
