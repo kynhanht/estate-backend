@@ -41,4 +41,7 @@ public class UserEntity extends AbstractEntity {
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<CustomerEntity> customers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<TransactionEntity> transactions = new ArrayList<>();
+
 }

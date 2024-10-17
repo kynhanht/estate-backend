@@ -13,18 +13,18 @@ public class CustomerConveter {
 
     private final ModelMapper modelMapper;
 
-    public CustomerDTO convertToDTO(CustomerEntity customerEntity) {
+    public CustomerDTO convertToDTO(CustomerEntity entity) {
 
-        return modelMapper.map(customerEntity, CustomerDTO.class);
+        return modelMapper.map(entity, CustomerDTO.class);
     }
 
-    public CustomerEntity convertToEntity(CustomerDTO customerDTO) {
+    public CustomerEntity convertToEntity(CustomerDTO dto) {
 
-        return modelMapper.map(customerDTO, CustomerEntity.class);
+        return modelMapper.map(dto, CustomerEntity.class);
     }
 
-    public CustomerSearchResponse convertToCustomerSearchResponse(CustomerEntity customerEntity) {
-        return modelMapper.map(customerEntity, CustomerSearchResponse.class);
+    public CustomerSearchResponse convertToCustomerSearchResponse(CustomerEntity entity) {
+        return modelMapper.map(entity, CustomerSearchResponse.class);
     }
 
 }

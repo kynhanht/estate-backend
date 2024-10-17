@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, JpaSpec
 
     List<UserEntity> findByStatusAndRoles_Code(Integer status, String code);
 
+    List<UserEntity> findByStatusAndCustomers_id(Integer status, Long customerId);
+
 //    Optional<UserEntity> findOneByUsername(String username);
 
     Long countByIdIn(List<Long> ids);

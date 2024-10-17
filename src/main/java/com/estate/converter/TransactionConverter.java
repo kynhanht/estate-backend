@@ -12,7 +12,11 @@ public class TransactionConverter {
 
     private final ModelMapper modelMapper;
 
-    public TransactionDTO convertToDTO(TransactionEntity transactionEntity) {
-        return modelMapper.map(transactionEntity, TransactionDTO.class);
+    public TransactionDTO convertToDTO(TransactionEntity entity) {
+        TransactionDTO dto = modelMapper.map(entity, TransactionDTO.class);
+        if(entity.getUser() != null ){
+            dto.setStaffName(entity.getUser().getFullName());
+        }
+        return dto;
     }
 }

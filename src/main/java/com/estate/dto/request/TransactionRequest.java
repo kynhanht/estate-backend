@@ -19,4 +19,6 @@ public class TransactionRequest implements Serializable {
     private Date appointmentDate;
 
     private String note;
+
+    private Long staffId;
 }

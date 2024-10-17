@@ -23,4 +23,6 @@ public class TransactionDTO implements Serializable {
 
     private String note;
 
+    private String staffName;
+
 }

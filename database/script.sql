@@ -93,8 +93,8 @@ VALUES (2, 1),
        (3, 3),
        (4, 3);
 
-INSERT INTO transactions(code, note, customer_id, appointment_date, created_date, created_by)
-VAlUES ('TRANSACTION_1', 'đi chơi với khách', 1, '2022-10-25', '2022-10-28', 'anonymous'),
-       ('TRANSACTION_1', 'đi ăn với khách', 1, '2022-10-25', '2022-10-28', 'anonymous'),
-       ('TRANSACTION_2', 'Đến toà nhà A', 1, '2022-10-25', '2022-10-29', 'anonymous'),
-       ('TRANSACTION_3', 'Ký hợp đồng 50tr', 1, '2022-10-25', '2022-10-29', 'anonymous');
+INSERT INTO transactions(code, note, customer_id, user_id, appointment_date, created_date, created_by)
+VAlUES ('TRANSACTION_1', 'đi chơi với khách', 1, 2 , '2022-10-25', '2022-10-28', 'anonymous'),
+       ('TRANSACTION_1', 'đi ăn với khách', 1, 2,  '2022-10-25', '2022-10-28', 'anonymous'),
+       ('TRANSACTION_2', 'Đến toà nhà A', 1, 3, '2022-10-25', '2022-10-29', 'anonymous'),
+       ('TRANSACTION_3', 'Ký hợp đồng 50tr', 1, 3, '2022-10-25', '2022-10-29', 'anonymous');

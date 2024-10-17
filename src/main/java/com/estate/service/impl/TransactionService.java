@@ -7,10 +7,12 @@ import com.estate.dto.request.TransactionRequest;
 import com.estate.dto.respone.TransactionResponse;
 import com.estate.entity.CustomerEntity;
 import com.estate.entity.TransactionEntity;
+import com.estate.entity.UserEntity;
 import com.estate.enums.TransactionEnum;
 import com.estate.exception.NotFoundException;
 import com.estate.repository.CustomerRepository;
 import com.estate.repository.TransactionRepository;
+import com.estate.repository.UserRepository;
 import com.estate.service.ITransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class TransactionService implements ITransactionService {
     private final TransactionRepository transactionRepository;
 
     private final CustomerRepository customerRepository;
+
+    private final UserRepository userRepository;
 
     private final TransactionConverter transactionConverter;
 
@@ -64,10 +68,14 @@ public class TransactionService implements ITransactionService {
 
         CustomerEntity customerEntity = customerRepository.findById(transactionRequest.getCustomerId())
                 .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.CUSTOMER_NOT_FOUND));
+        UserEntity userEntity = userRepository.findById(transactionRequest.getStaffId())
+                .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.USER_NOT_FOUND));
         TransactionEntity transactionEntity = new TransactionEntity();
         transactionEntity.setCode(transactionRequest.getCode());
         transactionEntity.setNote(transactionRequest.getNote());
+        transactionEntity.setAppointmentDate(transactionRequest.getAppointmentDate());
         transactionEntity.setCustomer(customerEntity);
+        transactionEntity.setUser(userEntity);
         return transactionConverter.convertToDTO(transactionRepository.save(transactionEntity));
     }
 }

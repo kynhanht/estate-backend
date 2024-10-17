@@ -29,8 +29,8 @@ public class BuildingConverter {
 
     public BuildingEntity convertToEntity(BuildingDTO dto) {
 
-        BuildingEntity buildingEntity = modelMapper.map(dto, BuildingEntity.class);
-        buildingEntity.setBuildingTypes(SystemUtils.convertBuildingTypes(dto.getBuildingTypes()));
+        BuildingEntity entity = modelMapper.map(dto, BuildingEntity.class);
+        entity.setBuildingTypes(SystemUtils.convertBuildingTypes(dto.getBuildingTypes()));
         // Convert String rentArea to RentAreaEntity
         if (StringUtils.isNotBlank(dto.getRentArea())) {
             List<RentAreaEntity> rentAreas = new ArrayList<>();
@@ -38,18 +38,18 @@ public class BuildingConverter {
             for (String rentArea : rentAreaStringArray) {
                 RentAreaEntity rentAreaEntity = new RentAreaEntity();
                 rentAreaEntity.setValue(Double.valueOf(rentArea));
-                rentAreaEntity.setBuilding(buildingEntity);
+                rentAreaEntity.setBuilding(entity);
                 rentAreas.add(rentAreaEntity);
             }
-            buildingEntity.setRentAreas(rentAreas);
+            entity.setRentAreas(rentAreas);
         }
-        return buildingEntity;
+        return entity;
     }
 
-    public BuildingSearchResponse convertToBuildingSearchResponse(BuildingEntity buildingEntity) {
+    public BuildingSearchResponse convertToBuildingSearchResponse(BuildingEntity entity) {
 
-        BuildingSearchResponse response = modelMapper.map(buildingEntity, BuildingSearchResponse.class);
-        response.setAddress(SystemUtils.convertToAddress(buildingEntity.getStreet(), buildingEntity.getWard(), buildingEntity.getDistrictCode()));
+        BuildingSearchResponse response = modelMapper.map(entity, BuildingSearchResponse.class);
+        response.setAddress(SystemUtils.convertToAddress(entity.getStreet(), entity.getWard(), entity.getDistrictCode()));
         return response;
     }
 

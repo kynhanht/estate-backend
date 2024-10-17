@@ -33,39 +33,39 @@ public class UserController {
 
     @GetMapping("/roles")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Map<String, String>> getRoles() {
+    public ResponseEntity<?> getRoles() {
         return ResponseEntity.ok(roleService.getRoles());
     }
 
 
     @PostMapping("/search")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Page<UserSearchResponse>> searchUsers(@RequestBody UserSearchRequest request,
+    public ResponseEntity<?> searchUsers(@RequestBody UserSearchRequest request,
                                                                  @PageableDefault(size = 4, sort = "username", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(userService.searchUsers(request, pageable));
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") long id) {
+    public ResponseEntity<?> getUserById(@PathVariable("id") long id) {
         return ResponseEntity.ok(userService.findUserById(id));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO dto) {
+    public ResponseEntity<?> createUser(@RequestBody UserDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(dto));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.updateUser(id, userDTO));
     }
 
     @DeleteMapping
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Void> deleteUsers(@RequestBody List<Long> ids) {
+    public ResponseEntity<?> deleteUsers(@RequestBody List<Long> ids) {
         if (ids != null && !ids.isEmpty()) {
             userService.deleteUsers(ids);
         }
@@ -73,42 +73,43 @@ public class UserController {
     }
 
     @GetMapping("/staffs")
-    public ResponseEntity<Map<Long, String>> getStaffs() {
+    public ResponseEntity<?> getStaffs() {
         return ResponseEntity.ok(userService.getStaffs());
     }
 
+
     @PutMapping("/{id}/change-password")
-    public ResponseEntity<String> changeUserPassword(@PathVariable("id") Long id, @RequestBody UserPasswordRequest userPasswordRequest) {
+    public ResponseEntity<?> changeUserPassword(@PathVariable("id") Long id, @RequestBody UserPasswordRequest userPasswordRequest) {
         userService.updatePassword(id, userPasswordRequest);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}/reset-password")
-    public ResponseEntity<UserDTO> resetUserPassword(@PathVariable("id") long id) {
+    public ResponseEntity<?> resetUserPassword(@PathVariable("id") long id) {
         return ResponseEntity.ok(userService.resetPassword(id));
     }
 
     @GetMapping("/{id}/profile")
-    public ResponseEntity<UserProfileResponse> getProfileUserByUserName(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getProfileUserByUserName(@PathVariable("id") Long id) {
         return ResponseEntity.ok(userService.findUserProfileById(id));
     }
 
     @PutMapping("/{id}/profile")
-    public ResponseEntity<UserProfileResponse> updateProfileUser(@PathVariable("id") Long id, @RequestBody UserProfileRequest request) {
+    public ResponseEntity<?> updateProfileUser(@PathVariable("id") Long id, @RequestBody UserProfileRequest request) {
         return ResponseEntity.ok(userService.updateUserProfile(id, request));
     }
 
     @GetMapping("/{buildingId}/building-staffs")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<StaffResponse>> loadStaffByBuildingId(@PathVariable Long buildingId) {
+    public ResponseEntity<?> loadBuildingStaffs(@PathVariable Long buildingId) {
 
-        return ResponseEntity.ok(userService.findStaffsByBuildingId(buildingId));
+        return ResponseEntity.ok(userService.findBuildingStaffs(buildingId));
     }
 
     @GetMapping("/{customerId}/customer-staffs")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<StaffResponse>> loadStaffsByCustomerId(@PathVariable Long customerId) {
+    public ResponseEntity<?> loadCustomerStaffs(@PathVariable Long customerId) {
 
-        return ResponseEntity.ok(userService.findStaffsByCustomerId(customerId));
+        return ResponseEntity.ok(userService.findCustomerStaffs(customerId));
     }
 }

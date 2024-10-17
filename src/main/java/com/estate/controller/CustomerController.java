@@ -5,6 +5,7 @@ import com.estate.dto.request.AssignmentCustomerRequest;
 import com.estate.dto.request.CustomerSearchRequest;
 import com.estate.dto.respone.CustomerSearchResponse;
 import com.estate.service.ICustomerService;
+import com.estate.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,8 @@ import java.util.List;
 public class CustomerController {
 
     private final ICustomerService customerService;
+
+    private final IUserService userService;
 
     @PostMapping("/search")
     public ResponseEntity<Page<CustomerSearchResponse>> searchCustomers(@RequestBody CustomerSearchRequest request, @PageableDefault(size = 4, sort = "fullName", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -64,6 +67,11 @@ public class CustomerController {
     public ResponseEntity<Void> assignCustomer(@RequestBody AssignmentCustomerRequest request) {
         customerService.assignCustomer(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{customerId}/staffs")
+    public ResponseEntity<?> loadStaffsByCustomerId(@PathVariable("customerId") Long customerId) {
+        return ResponseEntity.ok(userService.findStaffsByCustomerId(customerId));
     }
 
 }

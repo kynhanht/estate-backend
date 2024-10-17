@@ -173,46 +173,55 @@ public class UserService implements IUserService {
         return staffMap;
     }
 
+    public Map<Long, String> findStaffsByCustomerId(Long customerId) {
+        Map<Long, String> staffMap = new HashMap<>();
+        List<UserEntity> staffs = userRepository.findByStatusAndCustomers_id(SystemConstants.ACTIVE_STATUS, customerId);
+        for (UserEntity userEntity : staffs) {
+            staffMap.put(userEntity.getId(), userEntity.getFullName());
+        }
+        return staffMap;
+    }
+
     @Override
-    public List<StaffResponse> findStaffsByBuildingId(Long buildingId) {
+    public List<StaffResponse> findBuildingStaffs(Long buildingId) {
         // Get All staff who are active
         List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(SystemConstants.ACTIVE_STATUS, SystemConstants.STAFF);
         // Map to List<StaffResponse>
         return staffs.stream().map(staff -> {
-                    StaffResponse staffRespone = new StaffResponse();
-                    staffRespone.setStaffId(staff.getId());
-                    staffRespone.setFullName(staff.getFullName());
-                    staffRespone.setChecked(false);
+                    StaffResponse staffResponse = new StaffResponse();
+                    staffResponse.setStaffId(staff.getId());
+                    staffResponse.setFullName(staff.getFullName());
+                    staffResponse.setChecked(false);
                     // Map into List of buildingId
                     List<Long> buildingIds = staff.getBuildings()
                             .stream()
                             .map(AbstractEntity::getId)
                             .toList();
                     // Check List of buildingId contain request building
-                    if (buildingIds.contains(buildingId)) staffRespone.setChecked(true);
-                    return staffRespone;
+                    if (buildingIds.contains(buildingId)) staffResponse.setChecked(true);
+                    return staffResponse;
                 }
         ).collect(Collectors.toList());
     }
 
     @Override
-    public List<StaffResponse> findStaffsByCustomerId(Long customerId) {
+    public List<StaffResponse> findCustomerStaffs(Long customerId) {
         // Get All staff who are active
         List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(SystemConstants.ACTIVE_STATUS, SystemConstants.STAFF);
         // Map to List<StaffResponse>
         return staffs.stream().map(staff -> {
-                    StaffResponse staffRespone = new StaffResponse();
-                    staffRespone.setStaffId(staff.getId());
-                    staffRespone.setFullName(staff.getFullName());
-                    staffRespone.setChecked(false);
+                    StaffResponse staffResponse = new StaffResponse();
+                    staffResponse.setStaffId(staff.getId());
+                    staffResponse.setFullName(staff.getFullName());
+                    staffResponse.setChecked(false);
                     // Map into List of buildingId
                     List<Long> customerIds = staff.getCustomers()
                             .stream()
                             .map(AbstractEntity::getId)
                             .toList();
                     // Check List of customerId contain request customerId
-                    if (customerIds.contains(customerId)) staffRespone.setChecked(true);
-                    return staffRespone;
+                    if (customerIds.contains(customerId)) staffResponse.setChecked(true);
+                    return staffResponse;
                 }
         ).collect(Collectors.toList());
     }
