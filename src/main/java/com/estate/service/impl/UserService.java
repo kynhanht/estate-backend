@@ -172,10 +172,10 @@ public class UserService implements IUserService {
         }
         return staffMap;
     }
-
-    public Map<Long, String> findStaffsByCustomerId(Long customerId) {
+    @Override
+    public Map<Long, String> findStaffByCustomerId(Long customerId) {
         Map<Long, String> staffMap = new HashMap<>();
-        List<UserEntity> staffs = userRepository.findByStatusAndCustomers_id(SystemConstants.ACTIVE_STATUS, customerId);
+        List<UserEntity> staffs = userRepository.findByStatusAndCustomers_Id(SystemConstants.ACTIVE_STATUS, customerId);
         for (UserEntity userEntity : staffs) {
             staffMap.put(userEntity.getId(), userEntity.getFullName());
         }
@@ -183,7 +183,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<StaffResponse> findBuildingStaffs(Long buildingId) {
+    public List<StaffResponse> findBuildingStaffByBuildingId(Long buildingId) {
         // Get All staff who are active
         List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(SystemConstants.ACTIVE_STATUS, SystemConstants.STAFF);
         // Map to List<StaffResponse>
@@ -205,7 +205,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<StaffResponse> findCustomerStaffs(Long customerId) {
+    public List<StaffResponse> findCustomerStaffByCustomerId(Long customerId) {
         // Get All staff who are active
         List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(SystemConstants.ACTIVE_STATUS, SystemConstants.STAFF);
         // Map to List<StaffResponse>

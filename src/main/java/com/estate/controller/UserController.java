@@ -4,13 +4,9 @@ import com.estate.dto.UserDTO;
 import com.estate.dto.request.UserPasswordRequest;
 import com.estate.dto.request.UserProfileRequest;
 import com.estate.dto.request.UserSearchRequest;
-import com.estate.dto.respone.StaffResponse;
-import com.estate.dto.respone.UserProfileResponse;
-import com.estate.dto.respone.UserSearchResponse;
 import com.estate.service.IRoleService;
 import com.estate.service.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -98,18 +93,5 @@ public class UserController {
     public ResponseEntity<?> updateProfileUser(@PathVariable("id") Long id, @RequestBody UserProfileRequest request) {
         return ResponseEntity.ok(userService.updateUserProfile(id, request));
     }
-
-    @GetMapping("/{buildingId}/building-staffs")
-    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<?> loadBuildingStaffs(@PathVariable Long buildingId) {
-
-        return ResponseEntity.ok(userService.findBuildingStaffs(buildingId));
-    }
-
-    @GetMapping("/{customerId}/customer-staffs")
-    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<?> loadCustomerStaffs(@PathVariable Long customerId) {
-
-        return ResponseEntity.ok(userService.findCustomerStaffs(customerId));
-    }
+    
 }

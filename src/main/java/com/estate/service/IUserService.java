@@ -35,10 +35,10 @@ public interface IUserService {
 
     Map<Long, String> getStaffs();
 
-    Map<Long, String> findStaffsByCustomerId(Long customerId);
+    Map<Long, String> findStaffByCustomerId(Long customerId);
 
-    List<StaffResponse> findBuildingStaffs(Long buildingId);
+    List<StaffResponse> findBuildingStaffByBuildingId(Long buildingId);
 
-    List<StaffResponse> findCustomerStaffs(Long customerId);
+    List<StaffResponse> findCustomerStaffByCustomerId(Long customerId);
 
 }

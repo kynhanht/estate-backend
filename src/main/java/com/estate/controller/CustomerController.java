@@ -69,9 +69,15 @@ public class CustomerController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{customerId}/staffs")
-    public ResponseEntity<?> loadStaffsByCustomerId(@PathVariable("customerId") Long customerId) {
-        return ResponseEntity.ok(userService.findStaffsByCustomerId(customerId));
+    @GetMapping("/{customerId}/customer-staffs")
+    public ResponseEntity<?> findCustomerStaffByCustomerId(@PathVariable("customerId") Long customerId) {
+        return ResponseEntity.ok(userService.findCustomerStaffByCustomerId(customerId));
     }
+
+    @GetMapping("/{customerId}/staffs")
+    public ResponseEntity<?> findStaffByCustomerId(@PathVariable("customerId") Long customerId) {
+        return ResponseEntity.ok(userService.findStaffByCustomerId(customerId));
+    }
+
 
 }

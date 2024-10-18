@@ -7,6 +7,7 @@ import com.estate.exception.FileStorageException;
 import com.estate.service.IBuildingService;
 import com.estate.service.IFileStorageService;
 import com.estate.service.IMapValidationErrorService;
+import com.estate.service.IUserService;
 import com.estate.utils.SystemUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -32,6 +33,8 @@ public class BuildingController {
 
 
     private final IBuildingService buildingService;
+
+    private final IUserService userService;
 
     private final IMapValidationErrorService mapValidationErrorService;
 
@@ -103,6 +106,13 @@ public class BuildingController {
     public ResponseEntity<?> assignBuilding(@RequestBody AssignmentBuildingRequest request) {
         buildingService.assignBuilding(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{buildingId}/building-staffs")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<?> findBuildingStaffByBuildingId(@PathVariable Long buildingId) {
+
+        return ResponseEntity.ok(userService.findBuildingStaffByBuildingId(buildingId));
     }
 
     @GetMapping("/image/{filename:.+}")
