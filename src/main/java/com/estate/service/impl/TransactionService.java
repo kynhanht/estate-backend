@@ -16,6 +16,7 @@ import com.estate.repository.UserRepository;
 import com.estate.service.ITransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,6 +65,7 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
+    @Transactional
     public TransactionDTO createTransaction(TransactionRequest transactionRequest) {
 
         CustomerEntity customerEntity = customerRepository.findById(transactionRequest.getCustomerId())

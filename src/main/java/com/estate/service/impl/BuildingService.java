@@ -92,6 +92,7 @@ public class BuildingService implements IBuildingService {
     }
 
     @Override
+    @Transactional
     public BuildingDTO updateBuilding(Long id, BuildingDTO buildingDTO) {
         BuildingEntity oldBuildingEntity = buildingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorMessageConstants.BUILDING_NOT_FOUND));
